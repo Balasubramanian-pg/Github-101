@@ -4,5 +4,6 @@ You have mastered the fundamentals of Git and why we use Git. I am confident tha
 
 We can start here.
 
-<img width="814" height="693" alt="image" src="https://github.com/user-attachments/assets/510923b0-927b-4a9f-8627-ffbb9fdbbba4" />
+![Architecture diagram](https://github.com/user-attachments/assets/510923b0-927b-4a9f-8627-ffbb9fdbbba4)
+
 [^1]: This is a reference architecture, not a mandatory sequence. For example, a package may be published before production approval, and a release may be created before deployment or after deployment, depending on the team's release model.
