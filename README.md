@@ -2,13 +2,7 @@
 How Do You Really Use Github??
 You have mastered the fundamentals of Git and why we use Git. I am confident that you would also know where to Git, but have you ever thought about the different MOCs (Map of Contents) of Github that you should be aware of? Be it Github as an enterprise account or In Azure Devops or in other formats? What are certain POCs (Proof of concepts) you should definitely know so that life becomes easier?
 
-We can start here.
-
-
-
-Git stores a history of changes. GitHub and Azure Repos provide remote hosting and collaboration on top of that history.
-<img width="828" height="512" alt="image" src="https://github.com/user-attachments/assets/6584abf8-fd6c-4762-b0f1-b236fe19a2ac" />
-
+We can start here. Git stores a history of changes. GitHub and Azure Repos provide remote hosting and collaboration on top of that history.
 
 You need to understand how engineering teams build, review, test, release, deploy, secure, and maintain software and data systems. GitHub is one part of that system, not the whole thing.
 
@@ -16,45 +10,7 @@ Your POC should prove that you can design an engineering workflow, automate it, 
 
 # 1. The ecosystem you need to understand
 
-[Git Flow Made Easy With This Complete Walkthrough | Stephen Vinouze](https://images.openai.com/static-rsc-4/k_0esLKbqFGSiP5J2XoCyQz9tyz7kcWA0lCy0Uf9jMSD_bjxnAzYAHWvjO5x0CkUeCoZDor1PAHpLJ2jF6vzvphhvQgRlSKPJ1pV-xHJR0qqLBsOd9Fs_mgTJ9HnbBKBKpr-IHVSx8AHbxO0ODKrhKXhkjS6B7yZcE7rSJh5UIA?purpose=inline)
-
-Git: version control
-
-The foundation. Commits, branches, tags, diffs, merges, rebases, conflicts, history, and recovery.
-
-Git works independently of GitHub, Azure DevOps, or any other hosting platform.
-
-[How to Use Git and GitHub in a Team like a Pro – Featuring Harry and Hermione 🧙](https://images.openai.com/static-rsc-4/GTIwuorCLk7HcYU99kcveGCFz0Rb4kac2BNFins2TGb9p9MRl6wjOw9d-3Dfm8S0clV2b01hOh7rCcIy3gboMc_-FRqRuoCaEoOztyg3NKmG0QCyACME4Qd_uAgVUczFj4CL9trs23g7ii6k4a53N8ZcveSMPL7ncK9x9Yjoqe4?purpose=inline)
-
-GitHub or Azure Repos: collaboration
-
-Repositories, pull requests, reviews, branch protection, issues, permissions, CODEOWNERS, and auditability.
-
-These platforms host Git repositories and provide team workflows around them.
-
-[Supercharging your CICD game with Self-hosted Runners from GitHub Actions | by Achintha Reemal | Sysco LABS Sri Lanka | Medium](https://images.openai.com/static-rsc-4/nZ2QaqGJdp0pLQiKmLy9aVheQrPQt9UFgNf7__Ov7qi4rI4AWdbTKAsFxWGm2aTB5_k6JbP0mfSIwyYCvT5VUC1YIObgNieBK3mX7xCJwCfmb2gW7DHhi4UVHbX7W5Frts4-xsbqn6RuIsps2yYdAZbIzro_KwBCYks-Xb-cqBI?purpose=inline)
-
-CI/CD: automated engineering
-
-GitHub Actions, Azure Pipelines, runners, build jobs, tests, artifacts, deployment approvals, and rollback.
-
-CI validates changes. CD delivers them to the right environment.
-
-[Docker Image Build and Promotion Pipeline: A Production Guide](https://images.openai.com/static-rsc-4/t0m1J_QZgoblC8zsU3z3nnIlTnGml2QNc6LMWu93lVgrHMHKAierIVOM34w6xChrpzo_mHsuNQdIppagbEt9u0jMwdXvx6_BA6eNpNy6UZck2bfxGNcL46Q3foTUsgFr30zpXlIQz1vsKA8f5Vs_z_wby5iNwhvVoZsixTIkCS0?purpose=inline)
-
-Artifacts and distribution
-
-Packages, container registries, release assets, versioned libraries, dependency management, and provenance.
-
-Source code is not the same thing as a built or deployable artifact.
-
-[Worldpay Developer Hub](https://images.openai.com/static-rsc-4/sAJMeg5LtyNsrYComONQgz7DKj-flV2DdHR-dHbFmi-jq3wwQyC-9NEKjHYAdOLd6-MLH4z1egVLYiNarol4nitwE-pS4mENpDqPoAodicciEx4O2y_G_NNS9m7q8HPZ_z_ee0Icdug0Lrm6LIxw5ipgAaXq2yKtwUvFVD15qM0?purpose=inline)
-
-Integration and governance
-
-Webhooks, REST APIs, GitHub Apps, secrets, OIDC, identity, policies, observability, and incident response.
-
-These let your engineering system interact with the rest of the organization.
+<img width="710" height="586" alt="image" src="https://github.com/user-attachments/assets/aead27ca-1ce0-4f6c-b37f-c49fdaba26ca" />
 
 The key distinction: Git is the version-control engine. GitHub is a collaboration and automation platform built around Git. Azure DevOps offers a comparable ecosystem, but its repositories, pipelines, artifacts, and permissions have their own implementation and terminology.
 
