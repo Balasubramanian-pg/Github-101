@@ -298,25 +298,8 @@ This is a convention, not an automatic guarantee. Your team must define what cou
 
 The fundamental hierarchy is:
 
-Event
+<img width="734" height="390" alt="image" src="https://github.com/user-attachments/assets/e83a8d76-e024-4c14-bd6c-c387ac204aa9" />
 
-push, pull_request, release, schedule, manual dispatch
-
-Workflow
-
-YAML file in `.github/workflows/`
-
-Job 1
-
-Lint and static checks
-
-Job 2
-
-Unit and data tests
-
-Runner executes steps
-
-Shell commands, scripts, or reusable actions
 
 A starter workflow for a Python data engineering repository could look like this:
 
