@@ -101,27 +101,8 @@ This is a reference architecture, not a mandatory sequence. For example, a packa
 
 # 3. Git fundamentals: the part you cannot skip
 
-Git stores a history of changes. GitHub and Azure Repos provide remote hosting and collaboration on top of that history.
+<img width="724" height="446" alt="image" src="https://github.com/user-attachments/assets/676cd5ca-e64c-4d30-8dfe-7502cfd86822" />
 
-Repository
-
-A project containing files and Git history. A data engineering repository might contain PySpark jobs, SQL transformations, tests, deployment configuration, and documentation.
-
-Commit
-
-A snapshot of tracked project content plus metadata and links to parent commits. Commits give you traceability and a way to inspect or recover previous versions.
-
-Branch
-
-A movable reference to a commit, used to develop changes independently. A feature branch lets you work without immediately changing the main branch.
-
-Merge and rebase
-
-Merge integrates histories, usually preserving their branch structure. Rebase replays commits onto a different base, creating new commit identities. Both are useful, but they solve different history-management problems.
-
-Tag
-
-A named reference to a specific commit, often used to identify a release such as `v1.2.0`. A Git tag is not the same thing as a GitHub Release.
 
 ## The workflow you must be able to execute
 ```mermaid
