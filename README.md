@@ -10,9 +10,10 @@ Your POC should prove that you can design an engineering workflow, automate it, 
 
 # 1. The ecosystem you need to understand
 
-<img width="710" height="586" alt="image" src="https://github.com/user-attachments/assets/aead27ca-1ce0-4f6c-b37f-c49fdaba26ca" />
-
-The key distinction: Git is the version-control engine. GitHub is a collaboration and automation platform built around Git. Azure DevOps offers a comparable ecosystem, but its repositories, pipelines, artifacts, and permissions have their own implementation and terminology.
+| |
+| :---: |
+| <img width="710" height="586" alt="image" src="https://github.com/user-attachments/assets/aead27ca-1ce0-4f6c-b37f-c49fdaba26ca" /> |
+| <small>The key distinction: Git is the version-control engine. GitHub is a collaboration and automation platform built around Git. Azure DevOps offers a comparable ecosystem, but its repositories, pipelines, artifacts, and permissions have their own implementation and terminology.</small> |
 
 # 2. The complete concept map
 
