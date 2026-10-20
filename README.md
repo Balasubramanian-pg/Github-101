@@ -248,35 +248,7 @@ GitHub Docs
 
 This distinction trips up many engineers because the terms are often used loosely.
 
-1\. Source code
-
-The SQL, Python, YAML, notebooks, and configuration files maintained in Git.
-
-Example: the code for your provider-matching pipeline.
-
-2\. Build artifact
-
-An output produced from source code or a build process.
-
-Example: a versioned wheel file, a deployment bundle, or a packaged set of SQL migration scripts.
-
-3\. Package
-
-A distributable, versioned unit that consumers can install or retrieve from a registry.
-
-Example: `data_quality_lib==1.2.0` published to a Python package registry.
-
-4\. Release
-
-A named version of a project, often linked to a Git tag, release notes, and downloadable assets.
-
-Example: `v1.2.0`, documenting new validation rules and breaking changes.
-
-5\. Deployment
-
-Installing or applying a specific version to an environment.
-
-Example: deploying the tested release to Databricks DEV, then UAT, then PROD.
+<img width="725" height="447" alt="image" src="https://github.com/user-attachments/assets/adc8358a-8e15-4beb-9483-6d2913470186" />
 
 One version may have multiple artifacts. A release may contain multiple packages or deployment assets. A deployment should identify the exact artifact version it uses, not merely whatever code happens to be on `main`.
 
