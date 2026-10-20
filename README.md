@@ -8,3 +8,6 @@ We can start here.
 | :---: |
 | <img width="814" height="693" alt="Architecture diagram" src="https://github.com/user-attachments/assets/510923b0-927b-4a9f-8627-ffbb9fdbbba4" /> |
 | <small><sup>1</sup> This is a reference architecture, not a mandatory sequence. For example, a package may be published before production approval, and a release may be created before deployment or after deployment, depending on the team's release model.</small> |
+
+Git stores a history of changes. GitHub and Azure Repos provide remote hosting and collaboration on top of that history.
+<img width="828" height="512" alt="image" src="https://github.com/user-attachments/assets/6584abf8-fd6c-4762-b0f1-b236fe19a2ac" />
