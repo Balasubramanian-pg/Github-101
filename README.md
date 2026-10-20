@@ -169,53 +169,8 @@ The leadership-level requirement is not memorizing commands. It is knowing what 
 
 These are the concepts I would turn into individual POCs, rather than studying as isolated definitions.
 
-[GitHub API: How to retrieve the combined pull request status from commit statuses, check runs, and GitHub Action results - DEV Community](https://images.openai.com/static-rsc-4/uX3BVuCi1mg_QyLmfUB6wdIDb7Oe9I_b8spf-Dsb80nVN6TQ7Rp-Ss6vVs_CP3YnAhfc1eLJNSqJ4x_pA04kXLcqTAZTvgp7aQ_RB6lznAH3Hnzh1HgKedkgmdO78JC35vnW-kHzpyr5U2STLstCwg6Izq1dYfQRCRcLMa88V18?purpose=inline)
+<img width="712" height="886" alt="image" src="https://github.com/user-attachments/assets/7a72a7db-1181-4028-b800-04249b65df58" />
 
-Pull requests (PRs)
-
-A proposed change from one branch into another. PRs enable code review, comments, automated validation, approvals, and controlled integration.
-
-POC: require one reviewer, a passing test workflow, and resolution of review conversations before merging.
-
-[The Ultimate CODEOWNERS File Guide for Better Code Reviews - Aviator Blog](https://images.openai.com/static-rsc-4/ppybe_KKjI26jIpd8JjKCTtegtnKJCA1lyIArk1AhPTbV0T56JFvQCdfOepOoxgsD_rTTEJzIUVi06R6A-rys_QQjQn2MtY2NnVYvPij7m2KVMdDnpGlOLjvmJdja9PGsTG5a0xFYfVZp8-N9hrWtiYaC_T1Lawv4EVsNCD05pg?purpose=inline)
-
-Merge strategies and branch rules
-
-Learn merge commits, squash merges, and rebase merges. Configure protected branches or repository rulesets, required reviews, required status checks, and ownership-based reviews.
-
-POC: demonstrate that a failing SQL test blocks a merge into `main`.
-
-[Quickstart for GitHub Actions - GitHub Docs](https://images.openai.com/static-rsc-4/6ACUCBGn-4X25SKeYcdMCLol6oABSdzjA__y5S22ybNY7dP1rDgySFJwl_fGp8qI7xVJ6pwNVLSO1kle-JvES9hMyjvLiH3hrp3KiVeRLPto10N2d-i4BMmFL6PHb3uKpfi3a5D0h7kRLtuNSzrlLG0PF-VjxoxjlW0qaIX7s7s?purpose=inline)
-
-GitHub Actions
-
-A workflow is triggered by an event and contains jobs that run on runners. Jobs contain steps, which run commands or reusable actions.
-
-POC: lint Python and SQL, run unit tests, produce a test report, and fail the workflow when a check fails.
-
-[Azure Cost Estimator - automated cost estimations for ARM Templates, Bicep and Terraform](https://images.openai.com/static-rsc-4/495mM6p37VR5wz-KHEUIMs8Zh-6DhCG4DXsWnB2KYinVF-AZJ4W97LoIQvABvUb5QuHNzzHtrq3bYc_iyRjaVwPHeEPVm_mSIuqv4-ZMFGMyLd7edcptpWS1nVCzeZK5f6UFp17I7q7iwPQb8OUDFKLptvWjksmzN_M6_9m7vgg?purpose=inline)
-
-Tags and releases
-
-Tags identify versions in Git history. A GitHub Release associates a version tag with release notes and optional downloadable assets.
-
-POC: publish `v1.0.0` with changelog, deployment bundle, and a documented rollback version.
-
-[GitHub Packages | Christos Galanopoulos](https://images.openai.com/static-rsc-4/BjxIHa8JYPbVnYuoqwockHanOY9gPBHGu8JnO-gr1vIGbDFiMIXH6LHhwD1A5X9dWDTj6LsQfuvJYVQaN0xTV3h8mm8IPA9_KTspM1TNEWAsGykARuN7UxwzdLpMbbpi6KbETya-yMimnkKZWCCoj_OYdFHeaMkRonRh5rSb7Fk?purpose=inline)
-
-Packages and artifacts
-
-Packages distribute reusable software such as Python libraries, npm packages, NuGet packages, or container images. Build artifacts can also be stored as pipeline outputs.
-
-POC: package a reusable Python data-quality library, version it, publish it, and install it in a separate project.
-
-[Webhooks vs APIs: Data Ingestion Strategies for Engineering](https://images.openai.com/static-rsc-4/WoALMJBrUnAHiDPdnsxzoemuAqgts3c7PUP3DZpZw-zTLkNLHCmjMwLtfnakwvBBY-M17yfbR0UxhBA6IiY7dqaECWj7FwcMoXS01dWiORDi0zIpMmOKWU2OILs6-EWZguOuk__a7R7r5PXY-Pl_b7wuV7rsMAqXvhC7doMzGw0?purpose=inline)
-
-Webhooks and APIs
-
-A webhook sends an HTTP request when an event occurs. APIs let an application query or change platform resources. They are complementary, not interchangeable.
-
-POC: a PR event triggers a service that validates metadata, records an audit event, and sends a notification.
 
 ## Other concepts you should cover
 
