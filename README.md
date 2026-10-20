@@ -558,26 +558,8 @@ Exit criterion: You can demonstrate ownership of a production-oriented engineeri
 Be careful about a common trap: collecting tools and certificates can create the appearance of progress without proving that you can lead engineering work.
 
 For your target role, I would prioritize these five capabilities.
+<img width="803" height="500" alt="image" src="https://github.com/user-attachments/assets/ece181ff-9450-4910-87ba-85370d5bba5e" />
 
-Architecture
-
-You can explain repository boundaries, environment separation, shared libraries, deployment dependencies, and why the system is designed that way.
-
-Governance and security
-
-You know how to prevent unauthorized changes, protect production credentials, restrict CI permissions, and create an auditable release process.
-
-Reliability
-
-You test failure scenarios, understand retries and idempotency, can recover a failed deployment, and know how to detect data corruption.
-
-Engineering leadership
-
-You establish review standards, explain decisions clearly, mentor others, and choose appropriate levels of process rather than imposing maximum process everywhere.
-
-Measurable impact
-
-You can demonstrate improvements in deployment lead time, failure rates, recovery time, testing coverage, or engineering effort. You measure the baseline instead of inventing impressive percentages.
 
 ## 12. Your first POC should be this
 
