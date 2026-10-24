@@ -17,3 +17,30 @@ Managing schema changes safely across large-scale distributed datasets is critic
 | **Drop Column** | **BREAKING** | 30-day deprecation notice required | Queries referencing column fail |
 | **Widen Type (`INT` -> `BIGINT`)** | **Backward-Compatible** | Safe promotion | Downstream readers handle wider type |
 | **Narrow Type (`BIGINT` -> `INT`)**| **BREAKING** | Forbidden | Data truncation / runtime exceptions |
+
+## 3. Safe Column Renaming / Deprecation Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant DEV as Data Engineer
+    participant PR as Pull Request & CI Check
+    participant BRZ as Bronze / Silver Table
+    participant CON as Downstream Readers / BI
+
+    DEV->>PR: Propose renaming 'user_name' to 'customer_name'
+    PR-->>DEV: Flag BREAKING CHANGE: Trigger 3-Stage Migration
+    rect rgb(240, 248, 255)
+        note over DEV,CON: Phase 1: Dual-Write (Week 1 - 4)
+        DEV->>BRZ: Write to both 'user_name' AND 'customer_name'
+        DEV->>CON: Notify consumers to migrate to 'customer_name'
+    end
+    rect rgb(255, 250, 240)
+        note over DEV,CON: Phase 2: Deprecation Notice (Week 4)
+        CON->>CON: Update all SQL queries to reference 'customer_name'
+    end
+    rect rgb(255, 240, 245)
+        note over DEV,CON: Phase 3: Column Retirement (Week 5)
+        DEV->>BRZ: Stop writing to 'user_name' (Set to NULL or drop)
+    end
+```
