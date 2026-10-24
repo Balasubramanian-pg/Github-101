@@ -17,3 +17,37 @@ We enforce three core cluster policies across the enterprise:
 | **Personal Interactive** | Ad-hoc EDA & notebook testing | Single-Node (0 workers) | **15 minutes** | General purpose (8-16 GB RAM) |
 | **Team Collaborative** | Shared departmental development | 4 workers | **30 minutes** | Memory optimized (32 GB RAM) |
 | **Automated Batch Job** | Production pipelines & CI/CD | Autoscaling (1-8 nodes) | Immediate on completion | Compute optimized (Photon enabled) |
+
+## 3. Declarative Cluster Policy Definition (JSON Specification)
+
+### Personal Interactive Policy JSON
+```json
+{
+  "autotermination_minutes": {
+    "type": "range",
+    "minValue": 10,
+    "maxValue": 20,
+    "defaultValue": 15,
+    "isOptional": false
+  },
+  "spark_version": {
+    "type": "regex",
+    "pattern": "14\.3\..*-scala2\.12",
+    "defaultValue": "14.3.x-scala2.12"
+  },
+  "num_workers": {
+    "type": "fixed",
+    "value": 0,
+    "hidden": true
+  },
+  "spark_conf.spark.databricks.cluster.profile": {
+    "type": "fixed",
+    "value": "singleNode",
+    "hidden": true
+  },
+  "data_security_mode": {
+    "type": "fixed",
+    "value": "SINGLE_USER"
+  }
+}
+```
