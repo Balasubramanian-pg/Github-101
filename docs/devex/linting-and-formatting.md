@@ -75,3 +75,20 @@ sequenceDiagram
         CI->>CI: Re-verify linting in CI; Green status check
     end
 ```
+
+## 5. Style Suppression Policy & Exception Guidelines
+
+### Legitimate `# noqa` Usage
+Suppression comments (`# noqa`, `# type: ignore`) are permitted only in exceptional cases:
+* Wrapping complex legacy third-party library calls that lack type stubs.
+* Intentional cyclic imports required by dynamic PySpark plugin architectures.
+
+### Review Rule
+Every `# noqa` comment must include an inline reason:
+```python
+# Allowed:
+import legacy_spark_udf  # noqa: F401 (Imported for side-effects in legacy runtime)
+
+# FORBIDDEN:
+import legacy_spark_udf  # noqa
+```
