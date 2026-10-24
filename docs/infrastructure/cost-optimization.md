@@ -30,3 +30,28 @@ flowchart LR
         COMPACT --> IO["Decreases cloud read IOPS costs by 40%"]
     end
 ```
+
+## 4. Mandatory Resource Tagging Schema
+
+Every compute cluster and cloud resource must carry mandatory cost attribution tags enforced via Cluster Policies:
+
+```json
+{
+  "custom_tags.Environment": {
+    "type": "fixed",
+    "value": "production"
+  },
+  "custom_tags.Project": {
+    "type": "fixed",
+    "value": "lakehouse-orders"
+  },
+  "custom_tags.CostCenter": {
+    "type": "fixed",
+    "value": "CC-DATA-4012"
+  },
+  "custom_tags.Owner": {
+    "type": "fixed",
+    "value": "data-platform-team"
+  }
+}
+```
