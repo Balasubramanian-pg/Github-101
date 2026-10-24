@@ -66,3 +66,15 @@ flowchart TD
     H -- Yes --> I["Auto-terminate cluster (Saves cloud DBU cost)"]
     H -- No --> G
 ```
+
+## 5. Policy Governance & CI/CD Validation
+
+### Automated PR Validation
+The CI pipeline scans Databricks Asset Bundle definitions (`resources/jobs.yml`) to ensure all declared job clusters explicitly reference an approved policy ID:
+```bash
+# Validates job configurations enforce approved cluster policies
+python scripts/validate_cluster_policies.py
+```
+
+### Policy Evolution Cycle
+Policies are updated quarterly to retire deprecated Databricks Runtimes and add newer cost-effective instance families (e.g. AWS Graviton4).
