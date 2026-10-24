@@ -451,3 +451,64 @@ To operate at the lead level, engineering rigor must extend beyond simple pipeli
 2. **Shift-Left Quality**: Contract-driven development, automated schema evolution guards, and pre-merge validation.
 3. **Reproducible Deployments**: Databricks Asset Bundles (DABs), semantic versioning, and deterministic multi-environment promotion.
 4. **Resilient Operations**: Automated runbooks, idempotent recovery workflows, and cross-stage data reconciliation.
+
+### Platform Architecture & Document Directory
+
+```
+.
+├── .github/
+│   ├── issue_templates/bug_report.md       # Defect reporting with pipeline runtime context
+│   └── pull_request_template.md            # Enforces code review, testing & schema impact analysis
+├── CONTRIBUTING.md                          # Contribution guidelines, commit & branch standards
+├── SECURITY.md                              # Vulnerability reporting protocol & CVSS triage SLA
+└── docs/
+    ├── adr/                                # Architectural Decision Records
+    │   ├── 001-orchestration-choice.md     # GitHub Actions vs Airflow vs Step Functions
+    │   ├── 002-format-choice.md            # Delta Lake vs Apache Iceberg vs Apache Hudi
+    │   ├── 003-compute-engine.md           # Databricks Photon vs Serverless vs EMR
+    │   └── 004-secret-management.md        # Azure Key Vault / AWS Secrets Manager & OIDC
+    ├── architecture/                       # System & Data Architecture
+    │   ├── data-contracts.md               # JSON Schema / PyDantic / Great Expectations contracts
+    │   ├── state-management.md             # Delta ACID transactions, log commits & time travel
+    │   └── system-overview.md              # Medallion architecture (Bronze -> Silver -> Gold)
+    ├── cicd/                               # Continuous Integration & Delivery
+    │   ├── caching-strategy.md             # Pip, wheel, and compilation caching optimization
+    │   ├── environment-promotion.md        # Dev -> Staging -> Prod gates & approvals
+    │   ├── oidc-integration.md             # Keyless authentication with cloud providers
+    │   ├── pipeline-overview.md            # End-to-end CI/CD sequence and quality stages
+    │   ├── release-strategy.md             # Semantic versioning, changelog & artifact tagging
+    │   ├── reusable-workflows.md           # Modular shared GitHub Actions workflows
+    │   └── self-hosted-runners.md          # Hybrid VPC runner isolation and security
+    ├── devex/                              # Developer Experience
+    │   ├── dependency-management.md        # UV / Poetry lockfiles and supply chain integrity
+    │   ├── linting-and-formatting.md       # Ruff, Black, and SQLFluff pre-commit hooks
+    │   └── local-environment.md            # Devcontainers and Spark local testing harnesses
+    ├── infrastructure/                     # Infrastructure as Code (IaC) & Cloud
+    │   ├── cluster-policies.md             # Compute guardrails, auto-termination & tagging
+    │   ├── cost-optimization.md            # Spot instances, graviton nodes & storage tiers
+    │   ├── databricks-asset-bundles.md     # DABs configuration, bundle deployment & CI sync
+    │   ├── iac-overview.md                 # Terraform modules for cloud storage & compute
+    │   ├── identity-and-access.md          # Unity Catalog service principals, RBAC & ABAC
+    │   └── network-topology.md             # Private Link, VPC peering & transit gateways
+    ├── integrations/                       # Webhooks & External Services
+    │   ├── event-idempotency.md            # Deduplication tokens and transactional sinks
+    │   ├── external-api-auth.md            # mTLS, OAuth2 token exchange & rate limits
+    │   └── webhook-architecture.md         # Event-driven triggers and dead-letter queues
+    ├── runbooks/                           # Operational Runbooks & SRE
+    │   ├── alert-triage.md                 # Alert categorization, runbook links & noise reduction
+    │   ├── capacity-planning.md            # Shuffling skew, storage growth & compute forecasting
+    │   ├── data-reconciliation.md          # Multi-table checksums, row-count & drift repair
+    │   ├── emergency-rollback.md           # Atomic Delta restore, pipeline freeze & failover
+    │   ├── incident-response.md            # Severity matrix, war rooms & post-incident review
+    │   └── standard-deployment.md          # Blue/green deployment & canary verification steps
+    ├── security/                           # Platform Security
+    │   ├── secret-rotation.md              # Automated token cycling and zero-downtime rotation
+    │   └── vulnerability-scanning.md       # Trivy, Dependabot, and container vulnerability gates
+    └── testing/                            # Testing & Data Quality
+        ├── data-quality-framework.md       # Great Expectations, Soda Core & dbt assertions
+        ├── integration-testing.md          # End-to-end integration tests on ephemeral clusters
+        ├── mock-data-generation.md         # Faker, dbldatagen & synthetic data factories
+        ├── schema-evolution.md             # Schema enforcement, mergeSchema & deprecation policy
+        ├── test-data-management.md         # Golden datasets, anonymization & state teardown
+        └── unit-testing-guide.md           # Pure PySpark function testing with pytest
+```
