@@ -54,3 +54,11 @@ def inject_anomalies(clean_df):
         .otherwise(F.col("total_amount"))
     )
 ```
+
+## 5. Test Dataset Seeding & Clean Air Gap Policy
+
+### Deterministic Seeding Rule
+All synthetic generation scripts must specify a fixed integer seed (`randomSeed=42` / `Faker.seed(42)`). Randomness without fixed seeds creates non-deterministic test failures in CI.
+
+### Air Gap Audit
+Every test artifact directory is audited pre-merge to verify zero un-redacted PII (Social Security numbers, credit card numbers, email addresses) using automated regex scanners (`trufflehog` and `git-secrets`).
