@@ -60,3 +60,11 @@ def transform_silver_orders(bronze_df: DataFrame) -> DataFrame:
 ### SQL Standards
 * Use ANSI SQL standards validated via `sqlfluff` configured for Databricks / Spark SQL dialect.
 * All keywords must be UPPERCASE. Indentation is 4 spaces.
+
+## 5. Testing & Quality Assurance Gates
+
+Every PR must pass automated CI checks before review:
+1. **Unit Tests**: Minimum 85% code coverage for Python transformation modules using `pytest`.
+2. **Data Quality Assertions**: Data contracts verified with Great Expectations or Soda Core suites.
+3. **Synthetic Test Data**: Use `dbldatagen` or synthetic generators (`docs/testing/mock-data-generation.md`). Never commit real customer data or PII to the repository.
+4. **Schema Evolution Check**: Run `pytest tests/test_schema_evolution.py` to assert backward compatibility against baseline Delta schemas.
