@@ -44,3 +44,22 @@ sequenceDiagram
     ONC->>STK: Post Resolution Notification
     ONC->>WAR: Schedule Blameless Post-Mortem within 48h
 ```
+
+## 4. Communication Templates
+
+### Initial Stakeholder Broadcast (Within 20 minutes)
+```text
+Title: [INVESTIGATING - P0] Orders Ingest Pipeline Latency Breach
+Impact: Orders data in Gold lakehouse delayed by > 60 minutes. Power BI Executive Revenue dashboard showing stale data.
+Current Status: Incident response team mobilized. Investigating Spark driver OOM on batch 492.
+Next Update: In 30 minutes (14:30 UTC).
+Incident Commander: @Balasubramanian-pg
+```
+
+### Resolution Broadcast
+```text
+Title: [RESOLVED - P0] Orders Ingest Pipeline Latency Breach
+Summary: Offending batch rolled back and memory allocation increased. Data reconciled with 100% parity.
+Root Cause: Upstream order payload spike exceeded driver memory limits.
+Follow-up: Full Post-Incident Review will be shared within 48 hours.
+```
