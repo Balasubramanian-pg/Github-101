@@ -80,3 +80,19 @@ permissions:
     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 ```
+
+## 5. Security Guardrails & Troubleshooting
+
+### Strict Subject Claim Filtering
+Never configure wildcard trust policies (`repo:Balasubramanian-pg/*:*`). Always bind permissions to specific repositories and environments:
+```json
+{
+  "StringEquals": {
+    "token.actions.githubusercontent.com:sub": "repo:Balasubramanian-pg/Github-101:environment:prod"
+  }
+}
+```
+
+### Troubleshooting Common Handshake Failures
+* **Error `InvalidIdentityToken`**: Verify the audience claim matches between GitHub workflow and Cloud IAM trust policy.
+* **Error `AccessDenied`**: Confirm the branch or environment matches the `sub` claim regex.
