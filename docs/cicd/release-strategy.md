@@ -14,3 +14,16 @@ This document formalizes our release lifecycle, semantic versioning rules, artif
 | **MAJOR** (`v2.0.0`) | Breaking changes to schemas, dropped columns, major table restructuring | Dropping `customer_id`, changing partition key |
 | **MINOR** (`v1.4.0`) | Additive backward-compatible features | Adding new nullable column, new pipeline |
 | **PATCH** (`v1.3.2`) | Bug fixes, performance optimizations, runbook updates | Vectorizing filter, fixing null pointer exception |
+
+## 3. Release Lifecycle & Git Tagging Flow
+
+```mermaid
+flowchart LR
+    A["Merge to main"] --> B["Automated Semantic Release Analysis"]
+    B --> C{"Version Bump Detected?"}
+    C -- No --> D["Chore / Internal Build (No Tag)"]
+    C -- Yes --> E["Generate Git Tag (e.g. v2.4.0)"]
+    E --> F["Compile Python Wheel & DABs Artifact"]
+    F --> G["Publish GitHub Release & Changelog"]
+    G --> H["Deploy to Staging / Prod Environments"]
+```
