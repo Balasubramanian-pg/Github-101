@@ -60,3 +60,17 @@ Please confirm that required validation suites have been executed:
   <!-- State exact steps to restore previous state if deployment fails -->
   * Revert commit via git.
   * Delta Lake time travel restore command: `RESTORE TABLE <table_name> TO VERSION AS OF <version>`
+
+---
+
+## Security & Governance Checklist
+
+- [ ] No API keys, passwords, or cloud credentials committed
+- [ ] Secrets retrieved dynamically via Azure Key Vault / AWS Secrets Manager
+- [ ] Unity Catalog permissions and tags verified
+- [ ] Logging statements scrubbed of PII and sensitive parameters
+- [ ] Pre-commit hooks (`ruff`, `black`, `sqlfluff`) passed cleanly
+
+**Reviewer Sign-off**:
+- [ ] Lead Data Engineer approval
+- [ ] Platform Architect approval (if breaking schema change)
