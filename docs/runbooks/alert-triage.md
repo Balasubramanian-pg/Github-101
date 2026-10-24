@@ -45,3 +45,9 @@ flowchart TD
 checkpoint_df = spark.read.format("delta").load("s3://lakehouse-checkpoints/bronze/orders/offsets")
 display(checkpoint_df.orderBy(F.col("batchId").desc()).limit(5))
 ```
+
+## 5. Noise Reduction & Alert Tuning Guidelines
+
+To eliminate alert fatigue:
+* **Flapping Protection**: Alerts require at least 2 consecutive failures within 10 minutes before paging human engineers.
+* **Weekly Alert Review**: Any alert with > 5 pages per week that resulted in no code or operational change must be suppressed or converted to an informational dashboard.
