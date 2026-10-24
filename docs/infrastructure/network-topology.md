@@ -17,3 +17,30 @@ The data plane VPC is segmented into three dedicated subnet tiers:
 | **Compute Host Subnet**| `10.100.16.0/20`| Databricks Spark driver & worker host nodes | No public IP; Routes via Private Endpoints & NAT |
 | **Compute Container Subnet**| `10.100.32.0/20`| Databricks Spark internal container networking | Isolated internal communication |
 | **Private Endpoint Tier** | `10.100.48.0/24`| Cloud Storage, Key Vault, and Metastore endpoints| Strictly internal Private Link traffic |
+
+## 3. Network Architecture Diagram
+
+```mermaid
+flowchart TB
+    subgraph ControlPlane["Databricks Control Plane (Managed by Cloud/Vendor)"]
+        UI["Databricks Web UI & Job Scheduler"]
+    end
+
+    subgraph DataPlaneVPC["Customer Data Plane VPC (Private Subnet)"]
+        PL_CP["Private Link (Control Plane Connectivity)"]
+        SPARK["Databricks Spark Compute Cluster (No Public IP)"]
+        PL_S3["Private Endpoint (Lakehouse Storage)"]
+        PL_KV["Private Endpoint (Key Vault / Secrets)"]
+        NAT["NAT Gateway"]
+    end
+
+    subgraph CloudServices["Private Cloud Backbone"]
+        STORAGE["ADLS Gen2 / AWS S3 (Lakehouse Delta Tables)"]
+        VAULT["Azure Key Vault / AWS Secrets Manager"]
+    end
+
+    UI <-->|Private Link| PL_CP <--> SPARK
+    SPARK <-->|Private Link| PL_S3 <--> STORAGE
+    SPARK <-->|Private Link| PL_KV <--> VAULT
+    SPARK --> NAT -->|Outbound Whitelisted HTTPS Only| Internet["Authorized Package Mirrors (PyPI)"]
+```
