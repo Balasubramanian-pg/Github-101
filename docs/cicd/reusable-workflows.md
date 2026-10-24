@@ -47,3 +47,28 @@ jobs:
           pip install pytest pytest-cov pyspark
           pytest --cov=src --cov-fail-under=${{ inputs.coverage-threshold }} tests/
 ```
+
+## 3. Modular Workflow Hierarchy
+
+```mermaid
+flowchart TD
+    subgraph Caller["Caller Repositories"]
+        R1["Domain Repo: Orders Ingest"]
+        R2["Domain Repo: Customer 360"]
+        R3["Domain Repo: Risk Scoring"]
+    end
+
+    subgraph Central["Central Governance (Github-101 / Platform CI)"]
+        W1[".github/workflows/reusable-lint.yml"]
+        W2[".github/workflows/reusable-pyspark-test.yml"]
+        W3[".github/workflows/reusable-dabs-deploy.yml"]
+    end
+
+    R1 --> W1
+    R1 --> W2
+    R1 --> W3
+    R2 --> W1
+    R2 --> W2
+    R3 --> W1
+    R3 --> W3
+```
