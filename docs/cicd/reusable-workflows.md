@@ -104,3 +104,20 @@ jobs:
       - name: Deploy Asset Bundle
         run: databricks bundle deploy -t ${{ inputs.target-environment }}
 ```
+
+## 5. Version Pinning, Security & Governance
+
+### Security Pinning
+* **Tag-Based Pinning**: Consumer repositories reference centralized workflows via immutable git tags:
+  ```yaml
+  uses: Balasubramanian-pg/Github-101/.github/workflows/reusable-pyspark-test.yml@v2.1.0
+  ```
+* **Strict Permissions**: Reusable workflows declare minimal required permissions:
+  ```yaml
+  permissions:
+    contents: read
+    id-token: write
+  ```
+
+### Governance Enforcement
+Repositories failing to adopt the organization's reusable testing workflows are blocked from deploying to production via GitHub Organization Rulesets.
