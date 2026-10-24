@@ -30,3 +30,32 @@ def spark() -> SparkSession:
         .getOrCreate()
     )
 ```
+
+## 3. Transformation Testing Pattern
+
+Transformations are asserted using column-level and schema equality:
+
+```python
+# tests/test_orders_transform.py
+from pyspark.sql import types as T
+from chispa import assert_df_equality
+from src.transformations.orders import conform_orders
+
+def test_conform_orders_cleanses_status_and_timestamps(spark):
+    # 1. Arrange: Define synthetic input DataFrame
+    input_schema = T.StructType([
+        T.StructField("order_id", T.StringType(), True),
+        T.StructField("status", T.StringType(), True),
+        T.StructField("amount", T.DoubleType(), True),
+    ])
+    input_data = [("101", " pending ", 49.99), ("102", "SHIPPED", 120.00)]
+    input_df = spark.createDataFrame(input_data, schema=input_schema)
+
+    # 2. Act: Execute pure transformation function
+    result_df = conform_orders(input_df)
+
+    # 3. Assert: Verify results against expected DataFrame
+    expected_data = [("101", "PENDING", 49.99), ("102", "SHIPPED", 120.00)]
+    expected_df = spark.createDataFrame(expected_data, schema=input_schema)
+    assert_df_equality(result_df, expected_df, ignore_row_order=True)
+```
