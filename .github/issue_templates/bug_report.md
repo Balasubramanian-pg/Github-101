@@ -28,3 +28,23 @@ assignees: ""
   - [ ] Databricks Serverless Compute
   - [ ] Single-Node Interactive Cluster
 * **Orchestrator Run URL**: <!-- GitHub Actions run URL or Databricks Job Run URL -->
+
+### Reproduction Steps & Minimal Test Script
+
+Steps to reproduce the behavior:
+1. Trigger pipeline with input parameter `...`
+2. Run transformation step `...`
+3. Check table `...` at partition `...`
+
+```python
+# Minimal PySpark reproduction script
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.getOrCreate()
+# Reproducible snippet here
+```
+
+### Expected Behavior
+<!-- What the data or pipeline was expected to produce -->
+
+### Actual Behavior
+<!-- What actually happened (e.g. AnalysisException, SchemaMismatchException, incorrect row count) -->
