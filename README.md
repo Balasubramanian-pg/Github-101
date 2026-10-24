@@ -512,3 +512,47 @@ To operate at the lead level, engineering rigor must extend beyond simple pipeli
         ├── test-data-management.md         # Golden datasets, anonymization & state teardown
         └── unit-testing-guide.md           # Pure PySpark function testing with pytest
 ```
+
+### Platform Architecture & Data Flow Diagram
+
+```mermaid
+flowchart TB
+    subgraph Governance["Governance & Source Control"]
+        PR["Pull Request (.github/pull_request_template.md)"]
+        CI["CI Validation: Ruff / Pytest / Soda"]
+        CD["CD Deployment: Databricks Asset Bundles (DABs)"]
+        PR --> CI --> CD
+    end
+
+    subgraph Ingestion["Ingestion Layer (Bronze)"]
+        WH["Webhooks / Kafka / Event Hubs"]
+        RAW["Raw Landing Storage (Cloud Object Store)"]
+        BRONZE["Bronze Delta Lake (Raw Schema + Metadata)"]
+        WH --> RAW --> BRONZE
+    end
+
+    subgraph Transformation["Transformation Layer (Silver)"]
+        CLEAN["Data Cleansing & Deduplication"]
+        ENRICH["Entity Resolution & Contract Enforcement"]
+        SILVER["Silver Delta Lake (Conformed & Validated)"]
+        BRONZE --> CLEAN --> ENRICH --> SILVER
+    end
+
+    subgraph Serving["Serving Layer (Gold)"]
+        AGG["Aggregations & Dimensional Models"]
+        GOLD["Gold Delta Lake / Star Schema"]
+        BI["BI Dashboards & ML Feature Store"]
+        SILVER --> AGG --> GOLD --> BI
+    end
+
+    subgraph Reliability["Reliability & Observability"]
+        RECON["Data Reconciliation (docs/runbooks/data-reconciliation.md)"]
+        ALERT["Alert Triage (docs/runbooks/alert-triage.md)"]
+        ROLLBACK["Rollback Protocol (docs/runbooks/emergency-rollback.md)"]
+    end
+
+    SILVER -.-> RECON
+    GOLD -.-> RECON
+    RECON -.-> ALERT
+    ALERT -.-> ROLLBACK
+```
