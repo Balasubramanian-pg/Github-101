@@ -438,3 +438,16 @@ Then add the features in this order:
 The second repository is important. A single repository with a successful pipeline proves that you can configure CI/CD. Two or more repositories consuming a shared engineering standard start to demonstrate that you can design a platform for a team.
 
 My recommendation is to use GitHub as your learning environment, Python and SQL as your workload, and Azure/Databricks as your deployment target. Later, reproduce the essential workflow in Azure DevOps. That gives you both transferable knowledge and a credible portfolio for enterprise data engineering roles.
+
+
+---
+
+# 13. Lead Data Engineering Reference Platform: Operational Architecture
+
+To operate at the lead level, engineering rigor must extend beyond simple pipelines into platform governance, automated quality gates, verifiable data contracts, and enterprise-grade operational resilience. This repository serves as the definitive reference implementation for modern Lakehouse engineering on GitHub and Databricks.
+
+### Core Objectives
+1. **Zero-Trust Governance**: Fine-grained access control, automated secret rotation, and immutable audit trails.
+2. **Shift-Left Quality**: Contract-driven development, automated schema evolution guards, and pre-merge validation.
+3. **Reproducible Deployments**: Databricks Asset Bundles (DABs), semantic versioning, and deterministic multi-environment promotion.
+4. **Resilient Operations**: Automated runbooks, idempotent recovery workflows, and cross-stage data reconciliation.
