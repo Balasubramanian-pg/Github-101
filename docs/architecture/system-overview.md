@@ -58,3 +58,24 @@ sequenceDiagram
     SLV->>GLD: Dimensional Aggregations & SCD Type 2 logic
     GLD->>CON: Low-latency queries via Photon Engine / SQL Warehouses
 ```
+
+## 4. Resilience, Backpressure & Quarantine Patterns
+
+### Backpressure Control
+Streaming ingest pipelines utilize Databricks Auto Loader (`cloudFiles`) with configured max files per trigger:
+```python
+(spark.readStream
+    .format("cloudFiles")
+    .option("cloudFiles.format", "json")
+    .option("cloudFiles.maxFilesPerTrigger", 1000)
+    .option("cloudFiles.schemaLocation", "s3://lakehouse-metadata/schema/orders")
+    .load("s3://landing-zone/orders/")
+    .writeStream
+    .format("delta")
+    .option("checkpointLocation", "s3://lakehouse-checkpoints/bronze/orders")
+    .outputMode("append")
+    .toTable("bronze.orders"))
+```
+
+### Quarantine & Dead-Letter Queue
+Records failing schema validation or contract expectations are flagged with failure reasons (`FAILED_NOT_NULL`, `OUT_OF_RANGE`) and written directly to a quarantine schema. This guarantees zero pipeline halts for non-fatal payload drift while preserving full auditability.
