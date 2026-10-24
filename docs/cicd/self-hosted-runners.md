@@ -50,3 +50,10 @@ flowchart LR
     ARC -->|Private VNet Peering| PL --> DBR
     ARC -->|VPC Endpoint| S3
 ```
+
+## 4. Runner Hardening & Ephemeral Lifecycle
+
+To eliminate persistence risks across untrusted workloads:
+* **Ephemeral Runner Pods**: Every job executes inside a newly scheduled Kubernetes pod. Once the job completes (pass or fail), the pod and its volumes are terminated immediately.
+* **Non-Root Execution**: Runner containers run under non-root UID 1000.
+* **No Docker-in-Docker (DinD)**: Container builds use rootless build tools (Kaniko / Buildah) to prevent host privilege escalation.
