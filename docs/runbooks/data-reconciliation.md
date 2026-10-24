@@ -52,3 +52,18 @@ def reconcile_orders_partition(spark: SparkSession, partition_date: str):
     if discrepancy != 0:
         raise ValueError(f"CRITICAL: {discrepancy} records unaccounted for!")
 ```
+
+## 5. Targeted Partition Backfill Strategy
+
+When discrepancies exist, perform an atomic, idempotent partition replacement using Delta's `replaceWhere` option:
+
+```python
+# Atomic partition backfill without touching other days
+(reprocessed_silver_df.write
+    .format("delta")
+    .mode("overwrite")
+    .option("replaceWhere", "order_date = '2026-10-24'")
+    .saveAsTable("prod_lakehouse.silver.orders"))
+```
+
+This guarantees downstream readers never observe partial writes during reconciliation.
