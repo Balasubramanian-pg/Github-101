@@ -17,3 +17,16 @@ We track four core capacity indicators:
 | **Shuffle Spill to Disk** | Spark UI executor metrics | > 10 GB spill per batch | Increase worker memory or repartition keys |
 | **Delta Log Size** | `_delta_log` metadata | > 100,000 files in log | Review checkpoint and VACUUM frequencies |
 | **Job Duration Drift** | Databricks Job Run telemetry | Duration > 80% of SLA window | Rightsizing cluster or enable Photon |
+
+## 3. Compute Scaling Decision Tree
+
+```mermaid
+flowchart TD
+    A["Pipeline Execution Duration Approaching SLA"] --> B{"Is Bottleneck CPU or Memory?"}
+    B -- High CPU Utilization --> C{"Is workload vectorizable?"}
+    C -- Yes --> D["Enable Photon Compute Engine"]
+    C -- No --> E["Increase Worker Count (Horizontal Scaling)"]
+    B -- Memory Pressure / Shuffle Spill --> F{"Is Data Skewed on Join Keys?"}
+    F -- Yes --> G["Implement Salted Keys / Skew Hints"]
+    F -- No --> H["Upgrade to Memory-Optimized VMs (Vertical Scaling)"]
+```
