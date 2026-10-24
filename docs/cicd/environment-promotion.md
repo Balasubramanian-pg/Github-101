@@ -35,3 +35,29 @@ Promotion between environments is controlled by GitHub Environment Protection Ru
 1. **Required Approvers**: At least one designated Lead Data Engineer must approve the GitHub Environment deployment.
 2. **Wait Timer**: 5-minute stabilization pause before promoting to production.
 3. **Branch Protection**: Production deployments are strictly restricted to the `main` branch or signed `release/*` tags.
+
+## 3. Environment Promotion State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> FeatureBranch
+    FeatureBranch --> CodeReview: Open Pull Request
+    CodeReview --> MergedToMain: Approved & CI Green
+    MergedToMain --> DevDeployment: Automatic Trigger
+    DevDeployment --> IntegrationTesting: Deploy dev bundle
+    IntegrationTesting --> StagingDeployment: Tests Pass
+    state StagingDeployment {
+        [*] --> DeployStagingBundle
+        DeployStagingBundle --> RunSyntheticLoadTest
+        RunSyntheticLoadTest --> AssertDataContracts
+        AssertDataContracts --> [*]
+    }
+    StagingDeployment --> ProductionGate: Staging Assertions Pass
+    ProductionGate --> ProdDeployment: Lead Engineer Approval
+    state ProdDeployment {
+        [*] --> BlueGreenSwitch
+        BlueGreenSwitch --> RunProductionCanary
+        RunProductionCanary --> [*]
+    }
+    ProdDeployment --> [*]: Release Complete
+```
