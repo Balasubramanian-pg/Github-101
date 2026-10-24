@@ -15,3 +15,17 @@ Before initiating production deployment:
 - [ ] Staging data contracts validated with 100% pass rate (`checks/orders_quality.yml`).
 - [ ] Rollback commit and target Delta table version identified.
 - [ ] Downstream business stakeholders notified in `#data-releases`.
+
+## 3. Deployment Execution Workflow
+
+```mermaid
+flowchart TD
+    A["Merge Approved PR into main branch"] --> B["Automated GitHub Actions CD Workflow Triggers"]
+    B --> C["OIDC Authentication to Production Cloud Tenant"]
+    C --> D["Validate Production Bundle: databricks bundle validate -t prod"]
+    D --> E["Deploy Bundle: databricks bundle deploy -t prod"]
+    E --> F["Trigger Production Canary Run (orders_etl_canary)"]
+    F --> G{"Canary Output Passes Quality Gates?"}
+    G -- Yes --> H["Mark Deployment Successful; Notify #data-releases"]
+    G -- No --> I["TRIGGER EMERGENCY ROLLBACK RUNBOOK"]
+```
