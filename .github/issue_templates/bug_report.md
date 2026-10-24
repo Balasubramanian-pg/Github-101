@@ -58,3 +58,15 @@ spark = SparkSession.builder.getOrCreate()
   - [ ] Power BI / Tableau Executive Dashboards
   - [ ] Customer Feature Store (ML Models)
   - [ ] External Regulatory Reporting Feeds
+
+### Diagnostic Logs & Error Traceback
+
+```text
+<!-- Paste full stack trace or Spark driver logs here -->
+```
+
+### Incident Triage Checklist
+- [ ] Pipeline quarantined / paused if P0/P1
+- [ ] Alert triage runbook followed (`docs/runbooks/alert-triage.md`)
+- [ ] Data reconciliation runbook referenced (`docs/runbooks/data-reconciliation.md`)
+- [ ] Incident commander assigned (if Severity == P0)
