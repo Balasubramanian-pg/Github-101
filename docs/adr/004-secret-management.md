@@ -33,3 +33,9 @@ sequenceDiagram
     GHA->>KV: Access authorized vault secrets dynamically
     GHA->>DBR: Deploy Databricks Asset Bundle using scoped identity
 ```
+
+## Decision
+We enforce a **Zero-Static-Credential Architecture**:
+1. All GitHub Actions workflows authenticate via **OpenID Connect (OIDC)** Workload Identity Federation.
+2. External API tokens and database passwords are stored exclusively in **Azure Key Vault / AWS Secrets Manager**.
+3. Databricks access to secrets is achieved via **Key Vault-backed Databricks Secret Scopes**.
