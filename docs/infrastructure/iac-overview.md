@@ -38,3 +38,12 @@ Terraform remote state is stored securely in encrypted cloud storage with distri
 * **Storage Backend**: AWS S3 with AES-256 server-side encryption and bucket versioning / Azure Blob Storage.
 * **State Locking**: DynamoDB table locking / Azure Blob lease prevents concurrent conflicting executions.
 * **Access Control**: State buckets require MFA and exclude direct human write permissions.
+
+## 5. Automated CI/CD Pipeline for IaC
+
+Every Terraform pull request undergoes automated scanning:
+1. `terraform fmt -check`: Verifies code formatting.
+2. `tflint`: Validates cloud provider syntax and best practices.
+3. `trivy config .`: Scans for security misconfigurations and exposed ports.
+4. `terraform plan`: Generates execution plan and posts formatted diff directly to PR comments.
+5. `terraform apply`: Executed only upon merge to `main` via automated OIDC runners.
