@@ -68,3 +68,14 @@ When a pipeline step fails:
 1. GitHub Actions uploads step logs and PySpark error traces as build artifacts (retained for 14 days).
 2. A GitHub PR comment is posted with exact line failure diagnostics.
 3. If on the `main` branch, an alert webhook notifies `#data-ops-alerts` in Slack.
+
+## 5. Performance Targets & SLA Metrics
+
+| Metric | Target SLA | Monitoring Method |
+| :--- | :--- | :--- |
+| **PR CI Feedback Time** | < 3 minutes | GitHub Actions workflow telemetry |
+| **Full Build & Deploy Time** | < 10 minutes | Databricks Asset Bundle deployment metrics |
+| **Pipeline Success Rate** | > 99.0% | GitHub Insights weekly aggregation |
+| **Rollback Execution Time** | < 5 minutes | Automated git revert + bundle deploy |
+
+For reusable workflow implementations, see [Reusable Workflows](reusable-workflows.md). For environment promotion gates, see [Environment Promotion](environment-promotion.md).
