@@ -30,3 +30,24 @@ The OIDC exchange follows a three-step cryptographic validation:
   "environment": "prod"
 }
 ```
+
+## 3. OIDC Authentication Flow Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant GHA as GitHub Actions Runner
+    participant OIDC as GitHub OIDC Token Issuer
+    participant STS as AWS STS / Azure AD Entra ID
+    participant IAM as Cloud IAM Role
+    participant DBR as Databricks Cloud Workspace
+
+    GHA->>OIDC: Request OIDC ID token with audience 'https://github.com/Balasubramanian-pg'
+    OIDC-->>GHA: Return signed JWT
+    GHA->>STS: AssumeRoleWithWebIdentity(JWT, RoleARN)
+    STS->>OIDC: Verify cryptographic signature (JWKS)
+    STS->>IAM: Evaluate Trust Policy (Check 'sub' matches repo & main branch)
+    IAM-->>STS: Access Allowed
+    STS-->>GHA: Return temporary Session Credentials (1-hour TTL)
+    GHA->>DBR: Execute Asset Bundle deployment
+```
