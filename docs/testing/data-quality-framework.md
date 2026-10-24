@@ -32,3 +32,32 @@ flowchart TD
     G --> I
     H --> I
 ```
+
+## 4. Implementation with Great Expectations & Soda Core
+
+### Soda Core YAML Specification
+```yaml
+# checks/orders_quality.yml
+checks for silver_orders:
+  - row_count > 0
+  - missing_count(order_id) = 0
+  - duplicate_count(order_id) = 0
+  - missing_percent(customer_id) < 0.1%
+  - invalid_count(order_status) = 0:
+      valid values: ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED']
+  - min(total_amount) >= 0.00
+  - max(total_amount) <= 1000000.00
+  - freshness(created_at) < 60m
+```
+
+### PySpark Great Expectations Runner
+```python
+from great_expectations.dataset import SparkDFDataset
+
+def validate_dataframe(df):
+    ge_df = SparkDFDataset(df)
+    res_pk = ge_df.expect_column_values_to_not_be_null("order_id")
+    res_unique = ge_df.expect_column_values_to_be_unique("order_id")
+    if not (res_pk.success and res_unique.success):
+        raise ValueError("Data Quality Fatal Breach: Primary key constraints violated!")
+```
