@@ -34,3 +34,18 @@ sequenceDiagram
     SEC->>EXT: Revoke / Destroy Primary Credential (Key A)
     SEC->>SEC: Confirm zero authentication failures in telemetry logs
 ```
+
+## 4. Emergency Credential Revocation Protocol
+
+If a secret is inadvertently committed to GitHub or exposed in logs:
+1. **Immediate Revocation (< 15 minutes)**:
+   * Revoke the compromised credential directly at the provider console or cloud IAM.
+2. **Issue Replacement Credential**:
+   * Generate new credential and write to Azure Key Vault / AWS Secrets Manager.
+3. **Trigger Pipeline Secret Reload**:
+   * Restart streaming jobs to flush in-memory worker caches:
+   ```bash
+   databricks jobs restart --job-id 847291039482710
+   ```
+4. **Purge Commit History**:
+   * If committed to Git, use `git-filter-repo` or BFG Repo-Cleaner to purge the commit and force-push.
