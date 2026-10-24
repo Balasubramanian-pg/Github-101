@@ -58,3 +58,15 @@ Databricks Runtimes come with pre-installed Python libraries (e.g. `numpy`, `pan
 * Always cross-reference the target Databricks Runtime Release Notes (e.g. **DBR 14.3 LTS** includes Python 3.10.12, PySpark 3.5.0, PyArrow 14.0.1).
 * Never pin `pyarrow` to a major version higher than the runtime's native Hadoop filesystem connector supports.
 * Run `scripts/verify_dbr_compatibility.py` in CI to detect conflicting pre-installed packages.
+
+## 5. Software License Compliance & Auditing
+
+To protect corporate intellectual property from viral copyleft licenses:
+* Allowed Licenses: **MIT, Apache 2.0, BSD-2-Clause, BSD-3-Clause, ISC**.
+* Forbidden Licenses: **GPL, AGPL, LGPL** (without legal approval).
+
+### Automated License Audit Command
+```bash
+# Audits all installed dependencies against allowable license whitelist
+uv pip list --format=json | python scripts/audit_licenses.py
+```
