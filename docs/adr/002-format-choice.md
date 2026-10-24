@@ -32,3 +32,14 @@ A modern lakehouse requires an open, performant, and standardized table format t
 We select **Delta Lake with Universal Format (UniForm)** enabled as our primary storage format.
 
 By configuring Delta UniForm, the storage layer writes Delta transaction logs while automatically generating Apache Iceberg metadata in the background. This delivers top-tier performance on Databricks Photon while preserving cross-engine read capabilities for Trino and external query engines without duplicating Parquet data files.
+
+## Consequences
+
+### Positive
+* 2x-4x faster write and upsert throughput on Databricks clusters using Photon native vectorization.
+* Seamless time travel, schema evolution (`mergeSchema`), and zero-copy cloning.
+* Future-proof: UniForm eliminates vendor lock-in by providing Iceberg compatibility.
+
+### Negative & Mitigations
+* Writes incur slight overhead when generating dual metadata catalogs.
+  * *Mitigation*: Enable UniForm selectively on tables requiring external cross-engine consumption.
