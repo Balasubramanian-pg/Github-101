@@ -36,3 +36,27 @@ sequenceDiagram
     ONC->>DBR: RESUME ingestion jobs
     ONC->>ONC: Run reconciliation checks to verify data integrity
 ```
+
+## 4. Concrete Execution Commands
+
+### Step 1: Pause Production Pipeline Jobs
+```bash
+databricks jobs pause --job-id 847291039482710
+```
+
+### Step 2: Restore Delta Table to Healthy Version
+```sql
+-- Inspect table transaction history
+DESCRIBE HISTORY prod_lakehouse.silver.orders;
+
+-- Perform atomic point-in-time restoration
+RESTORE TABLE prod_lakehouse.silver.orders TO VERSION AS OF 28;
+```
+
+### Step 3: Revert Code in Git & Redeploy
+```bash
+# Revert offending commit locally or via GitHub UI
+git revert HEAD --no-edit
+git push origin main
+# CD workflow deploys stable bundle automatically
+```
