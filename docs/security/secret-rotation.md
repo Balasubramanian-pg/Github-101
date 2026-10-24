@@ -49,3 +49,17 @@ If a secret is inadvertently committed to GitHub or exposed in logs:
    ```
 4. **Purge Commit History**:
    * If committed to Git, use `git-filter-repo` or BFG Repo-Cleaner to purge the commit and force-push.
+
+## 5. Audit Logging & Verification
+
+Every secret access and rotation event is audited:
+```sql
+-- Audit secret scope access events in Databricks
+SELECT event_time, user_identity.email, request_params.scope, action_name
+FROM system.access.audit
+WHERE service_name = 'secrets'
+  AND event_time >= current_timestamp() - INTERVAL 24 HOURS
+ORDER BY event_time DESC;
+```
+
+Confirm that the new secret version is being consumed cleanly and log completion in the Enterprise Compliance Register.
