@@ -29,3 +29,24 @@ We deploy self-hosted runners using GitHub Actions Runner Controller (ARC) on pr
 │         Databricks Private Link        Internal Data Lake Storage      │
 └────────────────────────────────────────────────────────────────────────┘
 ```
+
+## 3. Network Topology & Security Boundaries
+
+```mermaid
+flowchart LR
+    subgraph GitHub["GitHub Cloud Control Plane"]
+        GH_API["GitHub API / Webhooks"]
+    end
+
+    subgraph VPC["Private Cloud VPC (No Inbound Internet)"]
+        NAT["NAT Gateway (Outbound HTTPS only)"]
+        ARC["ARC Runner Pod"]
+        PL["Azure / AWS Private Link"]
+        DBR["Databricks Control Plane"]
+        S3["Cloud Lakehouse Storage"]
+    end
+
+    GH_API <-->|Outbound Long Poll| NAT <--> ARC
+    ARC -->|Private VNet Peering| PL --> DBR
+    ARC -->|VPC Endpoint| S3
+```
