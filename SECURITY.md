@@ -29,3 +29,14 @@ To report a vulnerability privately:
 * Affected components (e.g. Databricks Asset Bundle, cluster policy, OIDC workflow, Delta table).
 * Proof of concept or reproduction script.
 * Assessment of blast radius and data exposure risk.
+
+## 3. Vulnerability Response Timeline & SLAs
+
+We adhere to rigorous incident response timelines based on CVSS v3.1 severity scores:
+
+| Severity Level | CVSS Range | Initial Acknowledgment | Triage & Assessment | Remediation SLA |
+| :--- | :--- | :--- | :--- | :--- |
+| **Critical** | 9.0 - 10.0 | < 2 hours | < 12 hours | < 24 hours |
+| **High** | 7.0 - 8.9 | < 6 hours | < 24 hours | < 72 hours |
+| **Medium** | 4.0 - 6.9 | < 24 hours | < 48 hours | < 14 calendar days |
+| **Low** | 0.1 - 3.9 | < 48 hours | < 5 business days | < 30 calendar days |
