@@ -20,3 +20,28 @@ tests/
 │   └── synthetic/                    # Generation scripts for large fixtures
 │       └── generate_performance_suite.py
 ```
+
+## 3. Ephemeral Sandbox Lifecycle Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> Provisioning
+    state Provisioning {
+        [*] --> GenerateUUID
+        GenerateUUID --> CreateTestCatalog: test_sandbox_{UUID}
+        CreateTestCatalog --> CreateS3Prefix: s3://test-bucket/{UUID}/
+    }
+    Provisioning --> Execution: Test Suite Starts
+    state Execution {
+        [*] --> LoadGoldenFixtures
+        LoadGoldenFixtures --> RunPipelineLogic
+        RunPipelineLogic --> AssertOutputState
+    }
+    Execution --> Teardown: Tests Complete
+    state Teardown {
+        [*] --> DropCatalogCascade
+        DropCatalogCascade --> PurgeS3Prefix
+        PurgeS3Prefix --> [*]
+    }
+    Teardown --> [*]: Clean Working Tree
+```
