@@ -68,3 +68,11 @@ Every PR must pass automated CI checks before review:
 2. **Data Quality Assertions**: Data contracts verified with Great Expectations or Soda Core suites.
 3. **Synthetic Test Data**: Use `dbldatagen` or synthetic generators (`docs/testing/mock-data-generation.md`). Never commit real customer data or PII to the repository.
 4. **Schema Evolution Check**: Run `pytest tests/test_schema_evolution.py` to assert backward compatibility against baseline Delta schemas.
+
+## 6. Pull Request Review & Merge Protocol
+
+1. **PR Description**: Fill out `.github/pull_request_template.md` completely, including the Schema Impact Analysis and Rollback Strategy.
+2. **Required Approvals**: At least two approvals, including at least one Lead Data Engineer.
+3. **Status Checks**: All CI workflows (linting, tests, security scan, bundle validate) must be green.
+4. **Merge Strategy**: Only **Squash and Merge** or **Rebase and Merge** are permitted to preserve a clean, linear git history.
+5. **Post-Merge**: Automated CD deploys changes to the Development environment. Staging and Production promotion follow the gates in `docs/cicd/environment-promotion.md`.
