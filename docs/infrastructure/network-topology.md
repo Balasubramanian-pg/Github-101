@@ -58,3 +58,29 @@ NSGs enforce strict port and protocol restrictions:
 * **Rule 100**: Allow HTTPS (port 443) to Private Endpoints for Cloud Storage and Key Vault.
 * **Rule 200**: Allow outbound HTTPS via NAT Gateway to approved PyPI repositories.
 * **Rule 999**: **DENY ALL OTHER EGRESS**.
+
+## 5. Private DNS & Connectivity Troubleshooting
+
+### Private DNS Zones
+Internal hostnames resolve to private IP addresses using managed private DNS zones:
+* `privatelink.blob.core.windows.net`
+* `privatelink.vaultcore.azure.net`
+* `privatelink.azuredatabricks.net`
+
+### Connectivity Verification Command
+In the event of network connectivity timeouts, run from a diagnostic notebook:
+```python
+import socket
+def check_port(host, port=443):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(3)
+    try:
+        s.connect((host, port))
+        return "SUCCESS"
+    except Exception as e:
+        return f"FAILED: {e}"
+    finally:
+        s.close()
+
+print(check_port("adb-prod.azuredatabricks.net"))
+```
