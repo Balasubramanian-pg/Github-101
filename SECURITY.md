@@ -49,3 +49,9 @@ Our security framework addresses critical data platform threat vectors:
 * **Data Exfiltration**: Databricks workspaces and cloud storage accounts enforce Private Link / Private Endpoints without public internet egress (`docs/infrastructure/network-topology.md`).
 * **PII & Data Masking**: All sensitive columns (SSN, credit card, email) are tokenized at the Bronze ingestion boundary using Unity Catalog Column-Level Masking.
 * **Dependency Poisoning**: All Python dependencies are pinned with SHA-256 hashes and audited using Trivy and Dependabot (`docs/security/vulnerability-scanning.md`).
+
+## 5. Coordinated Disclosure & Hall of Fame
+
+* We follow coordinated vulnerability disclosure principles. We request researchers allow 90 days before disclosing details publicly.
+* Verified security contributors who report novel vulnerabilities adhering to this policy will be recognized in our Security Hall of Fame.
+* For credential rotation procedures following a confirmed compromise, refer to [Secret Rotation Runbook](docs/security/secret-rotation.md).
