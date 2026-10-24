@@ -74,3 +74,19 @@ RETURN is_account_group_member('grp-executives') OR region = current_user_region
 ALTER TABLE prod_lakehouse.gold.orders 
 SET ROW FILTER filter_regional_orders ON (order_region);
 ```
+
+## 5. Audit Logging & Quarterly Access Recertification
+
+All access requests, table queries, and permission grants are streamed directly into Unity Catalog audit tables:
+
+```sql
+-- Query who accessed sensitive customer table in past 7 days
+SELECT event_time, user_identity.email, action_name, request_params
+FROM system.access.audit
+WHERE request_params.table_full_name = 'prod_lakehouse.silver.customers'
+  AND event_time >= current_timestamp() - INTERVAL 7 DAYS
+ORDER BY event_time DESC;
+```
+
+### Quarterly Recertification
+A compliance job runs quarterly exporting user-to-group mappings. Unused service principals or inactive user accounts are revoked automatically.
