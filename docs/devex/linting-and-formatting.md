@@ -15,3 +15,38 @@ Consistent style and automated static analysis preserve repository cleanliness, 
 | **Black** | Python Formatting | Python 3.11+ (100 char limit) | Deterministic AST formatting |
 | **Mypy** | Static Type Checking | Python Type Hints | Validates PySpark DataFrame annotations |
 | **SQLFluff** | SQL Linting & Formatting | Databricks / Spark SQL Dialect | Enforces uppercase keywords & 4-space indentation |
+
+## 3. Pre-Commit Configuration (`.pre-commit-config.yaml`)
+
+```yaml
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
+        args: [--line-length=100]
+
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 3.0.1
+    hooks:
+      - id: sqlfluff-lint
+        args: [--dialect, databricks]
+      - id: sqlfluff-fix
+        args: [--dialect, databricks]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+```
