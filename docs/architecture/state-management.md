@@ -28,3 +28,30 @@ A commit file contains discrete action entries:
 * `remove`: Marks a previously active Parquet file as logically deleted.
 * `metaData`: Updates table schema, partitioning columns, or configuration properties.
 * `protocol`: Enforces reader/writer protocol version constraints.
+
+## 3. Optimistic Concurrency Control (OCC) Workflow
+
+Delta Lake handles concurrent writes without global distributed locks using optimistic concurrency control:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant W1 as Writer 1 (Batch Ingestion)
+    participant W2 as Writer 2 (Late Arrival Upsert)
+    participant LOG as _delta_log/ Storage
+
+    W1->>LOG: Read current version (Version 10)
+    W2->>LOG: Read current version (Version 10)
+    W1->>W1: Process transformations locally
+    W2->>W2: Process transformations locally
+    W1->>LOG: Attempt commit as Version 11
+    LOG-->>W1: Commit SUCCESS (Atomic PUT)
+    W2->>LOG: Attempt commit as Version 11
+    LOG-->>W2: Commit REJECTED (Version 11 already exists)
+    W2->>LOG: Re-read Version 11 (Mutual conflict check)
+    alt Partitions do not overlap
+        W2->>LOG: Replay transaction and commit as Version 12 (SUCCESS)
+    else Direct partition collision
+        W2-->>W2: Raise ConcurrentModificationException
+    end
+```
