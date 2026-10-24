@@ -40,3 +40,12 @@ We adhere to rigorous incident response timelines based on CVSS v3.1 severity sc
 | **High** | 7.0 - 8.9 | < 6 hours | < 24 hours | < 72 hours |
 | **Medium** | 4.0 - 6.9 | < 24 hours | < 48 hours | < 14 calendar days |
 | **Low** | 0.1 - 3.9 | < 48 hours | < 5 business days | < 30 calendar days |
+
+## 4. Platform Threat Model & Security Controls
+
+Our security framework addresses critical data platform threat vectors:
+
+* **Credential Compromise**: Static long-lived tokens are strictly forbidden. All CI/CD pipelines authenticate to cloud providers via OIDC Workload Identity Federation (`docs/cicd/oidc-integration.md`).
+* **Data Exfiltration**: Databricks workspaces and cloud storage accounts enforce Private Link / Private Endpoints without public internet egress (`docs/infrastructure/network-topology.md`).
+* **PII & Data Masking**: All sensitive columns (SSN, credit card, email) are tokenized at the Bronze ingestion boundary using Unity Catalog Column-Level Masking.
+* **Dependency Poisoning**: All Python dependencies are pinned with SHA-256 hashes and audited using Trivy and Dependabot (`docs/security/vulnerability-scanning.md`).
