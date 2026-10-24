@@ -51,3 +51,32 @@ sequenceDiagram
     STS-->>GHA: Return temporary Session Credentials (1-hour TTL)
     GHA->>DBR: Execute Asset Bundle deployment
 ```
+
+## 4. Implementation Example: GitHub Actions & AWS / Azure
+
+### GitHub Actions Workflow Permissions
+```yaml
+permissions:
+  id-token: write   # Required to request GitHub OIDC JWT
+  contents: read    # Required to checkout code
+```
+
+### AWS Implementation
+```yaml
+- name: Configure AWS Credentials via OIDC
+  uses: aws-actions/configure-aws-credentials@v4
+  with:
+    role-to-assume: arn:aws:iam::123456789012:role/github-actions-data-platform
+    aws-region: us-east-1
+    audience: https://github.com/Balasubramanian-pg
+```
+
+### Azure Implementation
+```yaml
+- name: Azure Login via OIDC
+  uses: azure/login@v2
+  with:
+    client-id: ${{ secrets.AZURE_CLIENT_ID }}
+    tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+```
