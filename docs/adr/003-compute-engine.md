@@ -30,3 +30,14 @@ We select **Databricks with Photon Acceleration and Serverless Compute**:
 * **ETL & Ingestion**: Ephemeral Single-Node or Autoscaling Job Clusters running Photon Runtime.
 * **CI/CD & Integration Testing**: Serverless Compute for near-instant cold-start execution (< 15 seconds).
 * **Ad-hoc & BI Serving**: Databricks Serverless SQL Warehouses.
+
+## Consequences
+
+### Positive
+* Photon engine delivers up to 3x performance improvement on join and aggregate heavy workloads.
+* Serverless cold start cuts CI pipeline execution time from 7 minutes to under 45 seconds.
+* Centralized policy enforcement guarantees automatic cluster shutdown after 15 minutes of inactivity.
+
+### Negative & Mitigations
+* Higher DBU unit cost compared to open-source self-managed Spark.
+  * *Mitigation*: Offset by shorter execution duration and automated Spot instance provisioning.
