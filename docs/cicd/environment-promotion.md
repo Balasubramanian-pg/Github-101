@@ -93,3 +93,12 @@ targets:
     variables:
       catalog_name: prod_lakehouse
 ```
+
+## 5. Emergency Rollback & Promotion Audit
+
+* **Immediate Rollback**: If a defect is detected post-promotion, trigger the [Emergency Rollback Runbook](../runbooks/emergency-rollback.md).
+* **Audit Trail**: Every deployment creates an immutable audit record in GitHub Environment deployments, tracking:
+  * Deployer identity (Service Principal / Approver).
+  * Commit SHA and parent release tag.
+  * Target cloud workspace URL.
+  * Start and completion timestamps.
