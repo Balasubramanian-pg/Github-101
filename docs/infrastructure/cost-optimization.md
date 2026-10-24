@@ -55,3 +55,16 @@ Every compute cluster and cloud resource must carry mandatory cost attribution t
   }
 }
 ```
+
+## 5. Budget Alerts & Anomaly Detection Protocol
+
+### Alerting Thresholds
+Cloud billing alerts are configured at three threshold levels:
+* **80% Monthly Forecast**: Slack alert posted to `#data-platform-finops`.
+* **100% Budget Reached**: Email alert to Engineering Director and Lead Data Engineer.
+* **Spike Anomaly (> 200% daily moving average)**: Immediate PagerDuty alert to investigate runaway loops.
+
+### Incident Remediation for Cost Anomaly
+1. Query `system.billing.usage` to identify the runaway cluster ID or notebook run.
+2. Terminate rogue cluster via Databricks CLI: `databricks clusters delete --cluster-id <id>`.
+3. Post post-mortem in `#data-platform-finops`.
