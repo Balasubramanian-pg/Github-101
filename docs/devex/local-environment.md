@@ -50,3 +50,31 @@ pre-commit install
 # 5. Execute unit tests
 pytest tests/unit/
 ```
+
+## 4. VS Code Devcontainer Specification
+
+For engineers preferring a fully hermetic containerized environment, open the repository in VS Code Devcontainers:
+
+```json
+// .devcontainer/devcontainer.json
+{
+  "name": "Lead Data Engineering Platform Devcontainer",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "sqlfluff.vscode-sqlfluff",
+        "databricks.databricks"
+      ]
+    }
+  },
+  "postCreateCommand": "uv sync --dev && pre-commit install"
+}
+```
