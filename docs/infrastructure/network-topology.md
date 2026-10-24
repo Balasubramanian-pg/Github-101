@@ -44,3 +44,17 @@ flowchart TB
     SPARK <-->|Private Link| PL_KV <--> VAULT
     SPARK --> NAT -->|Outbound Whitelisted HTTPS Only| Internet["Authorized Package Mirrors (PyPI)"]
 ```
+
+## 4. Network Security Group (NSG) Rules
+
+NSGs enforce strict port and protocol restrictions:
+
+### Ingress Rules (Compute Subnet)
+* **Rule 100**: Allow inbound from Databricks Control Plane over Private Link on port 443 (Worker management).
+* **Rule 200**: Allow intra-cluster communication between workers across ports 1025-65535.
+* **Rule 999**: **DENY ALL INBOUND** from public internet (0.0.0.0/0).
+
+### Egress Rules
+* **Rule 100**: Allow HTTPS (port 443) to Private Endpoints for Cloud Storage and Key Vault.
+* **Rule 200**: Allow outbound HTTPS via NAT Gateway to approved PyPI repositories.
+* **Rule 999**: **DENY ALL OTHER EGRESS**.
