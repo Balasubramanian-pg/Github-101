@@ -34,3 +34,23 @@ def generate_mock_orders(spark: SparkSession, row_count: int = 1_000_000):
     )
     return data_spec.build()
 ```
+
+## 4. Controlled Anomaly & Edge Case Injection
+
+Synthetic data generators support controlled defect injection to test pipeline resilience:
+
+```python
+def inject_anomalies(clean_df):
+    """Inject synthetic corruption to validate data quality quarantine gates."""
+    import pyspark.sql.functions as F
+    
+    return clean_df.withColumn(
+        "order_status",
+        F.when(F.rand() < 0.02, "INVALID_STATUS_CODE") # 2% corrupt status
+        .otherwise(F.col("order_status"))
+    ).withColumn(
+        "total_amount",
+        F.when(F.rand() < 0.01, -99.99)               # 1% negative amounts
+        .otherwise(F.col("total_amount"))
+    )
+```
