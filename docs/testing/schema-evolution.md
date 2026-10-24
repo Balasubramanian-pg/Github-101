@@ -71,3 +71,11 @@ def test_schema_backward_compatibility(spark):
         pr_field = pr_schema[field.name]
         assert pr_field.dataType == field.dataType, f"Breaking: Type changed for {field.name}"
 ```
+
+## 5. Governance Checklist for Breaking Schema Changes
+
+Before merging any PR flagged with breaking schema modifications:
+- [ ] Schema impact analysis completed in `.github/pull_request_template.md`.
+- [ ] Downstream consumer stakeholders notified across Slack and email.
+- [ ] Unity Catalog column tags updated (`status: deprecated`, `eol_date: 2026-12-01`).
+- [ ] Written approval granted by the Lead Platform Architect.
