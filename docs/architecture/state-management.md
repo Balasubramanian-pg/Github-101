@@ -75,3 +75,24 @@ If bad data is merged into production, the table can be rolled back instantly wi
 -- Immediate atomic rollback in SQL
 RESTORE TABLE silver.orders TO VERSION AS OF 15;
 ```
+
+## 5. Storage Maintenance: Compaction, Vacuuming & Liquid Clustering
+
+To maintain high query performance and manage storage costs, automated maintenance jobs run weekly:
+
+### Compaction & Z-Ordering
+```sql
+OPTIMIZE silver.orders
+WHERE order_date >= current_date() - INTERVAL 30 DAYS
+ZORDER BY (customer_id, order_status);
+```
+
+### Vacuum Safety Protocols
+```sql
+-- Retain 168 hours (7 days) of history for audit and emergency rollback
+SET spark.databricks.delta.vacuum.parallelDelete.enabled = true;
+VACUUM silver.orders RETAIN 168 HOURS;
+```
+
+> [!CAUTION]
+> Never set retention to 0 hours in production. Vacuuming active files will cause `FileNotFoundException` in running queries.
