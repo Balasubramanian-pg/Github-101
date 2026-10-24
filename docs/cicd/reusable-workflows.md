@@ -72,3 +72,35 @@ flowchart TD
     R3 --> W1
     R3 --> W3
 ```
+
+## 4. Reusable Deployment Workflow for Databricks Bundles
+
+```yaml
+# .github/workflows/reusable-dabs-deploy.yml
+name: Reusable DABs Deployment
+
+on:
+  workflow_call:
+    inputs:
+      target-environment:
+        required: true
+        type: string
+      databricks-cli-version:
+        required: false
+        type: string
+        default: "0.220.0"
+
+jobs:
+  deploy-bundle:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target-environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+      - name: Validate Asset Bundle
+        run: databricks bundle validate -t ${{ inputs.target-environment }}
+      - name: Deploy Asset Bundle
+        run: databricks bundle deploy -t ${{ inputs.target-environment }}
+```
