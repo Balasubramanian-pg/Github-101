@@ -57,3 +57,15 @@ To eliminate persistence risks across untrusted workloads:
 * **Ephemeral Runner Pods**: Every job executes inside a newly scheduled Kubernetes pod. Once the job completes (pass or fail), the pod and its volumes are terminated immediately.
 * **Non-Root Execution**: Runner containers run under non-root UID 1000.
 * **No Docker-in-Docker (DinD)**: Container builds use rootless build tools (Kaniko / Buildah) to prevent host privilege escalation.
+
+## 5. Autoscaling Policies & Health Monitoring
+
+### Horizontal Pod Autoscaler (HPA)
+ARC autoscales runner pods based on queued workflow depth:
+* **Min Replicas**: 1 (Warm standby for immediate response).
+* **Max Replicas**: 20 (Prevents cloud cluster saturation).
+* **Scale-Down Stabilization**: 5 minutes idle threshold.
+
+### Monitoring & Alerts
+* Runner registration health monitored via Datadog / Prometheus metrics (`arc_runners_registered`, `arc_runners_busy`).
+* Alert triggers if queued jobs remain unassigned for > 60 seconds.
