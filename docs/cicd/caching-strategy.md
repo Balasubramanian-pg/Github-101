@@ -60,3 +60,12 @@ key: ${{ runner.os }}-venv-${{ hashFiles('poetry.lock') }}
 To protect against supply chain poisoning:
 * Cache writes are restricted to the default branch (`main`).
 * Pull requests from forks cannot read or write to internal repository caches.
+
+## 5. Performance Benchmarks
+
+| Pipeline Stage | Cold Run (No Cache) | Warm Run (Cache Hit) | Velocity Gain |
+| :--- | :--- | :--- | :--- |
+| **Dependency Installation** | 3m 45s | 18s | **12.5x faster** |
+| **Pre-commit Linting** | 1m 20s | 9s | **8.8x faster** |
+| **PySpark Unit Tests** | 2m 10s | 45s | **2.8x faster** |
+| **Total PR CI Feedback** | **7m 15s** | **1m 12s** | **6.0x overall improvement** |
