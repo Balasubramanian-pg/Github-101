@@ -16,3 +16,17 @@ Cloud data platforms require strict cost controls to maximize engineering return
 | **Photon Vectorization** | Enable Photon runtime on compute-heavy aggregate queries | **2x faster execution -> Lower net DBU** |
 | **ARM / Graviton Instance Types** | Provision Graviton3 / ARM-based VMs (`m6gd.xlarge`) | **20% price-to-performance gain** |
 | **Single-Node Test Clusters** | Run CI unit/integration tests on single-node VM (Driver only) | **Eliminates multi-node worker overhead** |
+
+## 3. Storage Lifecycle & Delta Lake Compaction Economics
+
+```mermaid
+flowchart LR
+    A["Raw Bronze Ingestion"] -->|Hot Storage (Standard S3 / Hot Blob)| B["0 to 30 Days: Fast Processing"]
+    B -->|Lifecycle Transition| C["Cool Tier: 30 to 90 Days (50% cheaper)"]
+    C -->|Lifecycle Transition| D["Archive Tier / Glacier: > 90 Days (85% cheaper)"]
+
+    subgraph DeltaCompaction["Delta Maintenance Optimization"]
+        OPT["Weekly OPTIMIZE + Z-ORDER"] --> COMPACT["Reduces small parquet files"]
+        COMPACT --> IO["Decreases cloud read IOPS costs by 40%"]
+    end
+```
