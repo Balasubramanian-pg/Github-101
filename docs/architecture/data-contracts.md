@@ -64,3 +64,31 @@ flowchart TD
     E --> H["Alert Triggered: Slack / PagerDuty"]
     G --> I["Write to silver.orders with Unity Catalog Constraints"]
 ```
+
+## 4. Runtime Validation Implementation in PySpark
+
+Contract enforcement is implemented as a vectorized filter to preserve Photon query execution speeds:
+
+```python
+from pyspark.sql import DataFrame
+import pyspark.sql.functions as F
+
+def enforce_order_contract(df: DataFrame) -> tuple[DataFrame, DataFrame]:
+    valid_conditions = (
+        F.col("order_id").isNotNull() &
+        F.col("customer_id").isNotNull() &
+        F.col("order_status").isin(["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"]) &
+        (F.col("total_amount") >= 0.00) &
+        (F.col("total_amount") <= 1000000.00) &
+        F.col("created_at").isNotNull()
+    )
+    
+    valid_df = df.filter(valid_conditions)
+    invalid_df = df.filter(~valid_conditions).withColumn(
+        "rejection_reason",
+        F.when(F.col("order_id").isNull(), "NULL_ORDER_ID")
+        .when(~F.col("order_status").isin(["PENDING", "CONFIRMED", "SHIPPED"]), "INVALID_STATUS")
+        .otherwise("OUT_OF_BOUNDS")
+    )
+    return valid_df, invalid_df
+```
