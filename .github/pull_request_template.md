@@ -27,3 +27,18 @@
 | Target Table Name | Layer (Bronze/Silver/Gold) | Column Name | Change Type (Add/Modify/Drop) | Data Type | Nullable? | Downstream Impact |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | `silver.orders` | Silver | `customer_tier` | Add | `STRING` | Yes | None (Additive) |
+
+---
+
+## Data Quality & Testing Evidence
+
+Please confirm that required validation suites have been executed:
+- [ ] Local unit tests passed (`pytest tests/unit/`)
+- [ ] Great Expectations / Soda Core data contract suite executed
+- [ ] Tested on synthetic mock dataset (no production PII used)
+- [ ] PySpark query execution plan (`explain()`) reviewed for broadcast joins and partition skew
+
+### Test Output Snippet
+```text
+<!-- Paste terminal output from pytest or contract suite here -->
+```
