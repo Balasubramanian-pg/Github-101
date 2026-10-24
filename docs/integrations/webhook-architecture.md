@@ -15,3 +15,30 @@ The webhook architecture consists of four distinct components:
 2. **Edge Ingestion Gateway**: Cloud API Gateway (AWS API Gateway / Azure API Management) verifying SSL/TLS and rate limits.
 3. **Buffering Message Queue**: AWS SQS / Azure Event Hubs decoupling ingest velocity from compute availability.
 4. **Processing Sink**: Databricks Auto Loader or Spark Structured Streaming reading continuously from the message queue.
+
+## 3. End-to-End Webhook Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant GH as GitHub / External Webhook Emitter
+    participant GW as Cloud API Gateway (Edge)
+    participant Q as Event Queue (SQS / Event Hubs)
+    participant DLQ as Dead-Letter Queue (DLQ)
+    participant DBR as Databricks Structured Streaming
+
+    GH->>GW: POST /webhooks/events (Payload + X-Hub-Signature-256)
+    GW->>GW: Verify HMAC SHA-256 signature against Key Vault secret
+    alt Signature Valid
+        GW->>Q: Enqueue JSON payload with idempotency message ID
+        GW-->>GH: HTTP 202 Accepted (< 200ms)
+    else Signature Invalid
+        GW-->>GH: HTTP 401 Unauthorized (Drop request immediately)
+    end
+    Q->>DBR: Micro-batch stream reads buffered events
+    alt Processing Fails 3 times
+        Q->>DLQ: Route to Dead-Letter Queue for inspection
+    else Processing Passes
+        DBR->>DBR: Idempotent MERGE into Bronze lakehouse table
+    end
+```
