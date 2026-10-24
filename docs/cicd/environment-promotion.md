@@ -61,3 +61,35 @@ stateDiagram-v2
     }
     ProdDeployment --> [*]: Release Complete
 ```
+
+## 4. Multi-Environment Bundle Configuration (`databricks.yml`)
+
+The platform uses Databricks Asset Bundles to declare target-specific configurations cleanly:
+
+```yaml
+bundle:
+  name: lead-data-pipeline
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-dev.azuredatabricks.net
+    variables:
+      catalog_name: dev_lakehouse
+
+  staging:
+    mode: production
+    workspace:
+      host: https://adb-staging.azuredatabricks.net
+    variables:
+      catalog_name: staging_lakehouse
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-prod.azuredatabricks.net
+    variables:
+      catalog_name: prod_lakehouse
+```
