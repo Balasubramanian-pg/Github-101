@@ -49,3 +49,18 @@ schema:
     type: "timestamp"
     nullable: false
 ```
+
+## 3. Enforcement Architecture & Flow
+
+```mermaid
+flowchart TD
+    A["Raw Ingest Batch"] --> B["Contract Schema Validator (PyDantic / Cerberus)"]
+    B --> C{"Schema Conformant?"}
+    C -- Yes --> D["Semantic Rules Validation (Great Expectations)"]
+    C -- No --> E["Quarantine Sink (quarantine.orders_contract_breach)"]
+    D --> F{"Semantic Assertions Pass?"}
+    F -- Yes --> G["Silver Transformation Pipeline"]
+    F -- No --> E
+    E --> H["Alert Triggered: Slack / PagerDuty"]
+    G --> I["Write to silver.orders with Unity Catalog Constraints"]
+```
