@@ -61,3 +61,24 @@ def validate_dataframe(df):
     if not (res_pk.success and res_unique.success):
         raise ValueError("Data Quality Fatal Breach: Primary key constraints violated!")
 ```
+
+## 5. Telemetry Schema & Observability Dashboard
+
+All quality check outputs are appended to an immutable audit table in Unity Catalog:
+
+```sql
+CREATE TABLE metadata.dq_telemetry (
+    check_id STRING,
+    check_timestamp TIMESTAMP,
+    pipeline_name STRING,
+    target_table STRING,
+    check_name STRING,
+    severity_tier STRING,
+    passed BOOLEAN,
+    records_checked BIGINT,
+    failed_record_count BIGINT,
+    diagnostic_details STRING
+) USING DELTA;
+```
+
+This table powers automated Databricks Lakeview dashboards tracking Data SLA compliance and pipeline reliability.
