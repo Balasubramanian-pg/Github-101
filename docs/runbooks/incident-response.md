@@ -63,3 +63,11 @@ Summary: Offending batch rolled back and memory allocation increased. Data recon
 Root Cause: Upstream order payload spike exceeded driver memory limits.
 Follow-up: Full Post-Incident Review will be shared within 48 hours.
 ```
+
+## 5. Blameless Post-Incident Review (PIR) Standard
+
+Within 48 hours of resolving any P0/P1 incident, the team must hold a Blameless PIR:
+1. **Focus on Systems, Not People**: Human errors are symptoms of systemic shortcomings, not root causes.
+2. **Timeline Reconstruction**: Exact minute-by-minute timeline reconstructed from logs.
+3. **5 Whys Root Cause Analysis**: Deep interrogation of why monitoring failed to catch the issue earlier.
+4. **Action Items with Owners**: Preventive improvements entered into Jira backlog with 14-day completion SLA.
