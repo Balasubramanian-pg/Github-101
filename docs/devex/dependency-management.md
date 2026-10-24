@@ -34,3 +34,18 @@ dev = [
     "sqlfluff>=3.0.0",
 ]
 ```
+
+## 3. Dependency Update & Security Scan Workflow
+
+```mermaid
+flowchart TD
+    A["Weekly Dependabot / UV Audit Scan"] --> B{"Vulnerability or New Version Found?"}
+    B -- No --> C["Repository Up-to-Date; No Action"]
+    B -- Yes --> D["Dependabot Opens Automated Pull Request"]
+    D --> E["CI Pipeline: Build & Test (pytest)"]
+    E --> F["Security Scanner (Trivy / Safety) asserts zero CVEs"]
+    F --> G["Databricks Runtime Compatibility Check"]
+    G --> H{"All Checks Pass Cleanly?"}
+    H -- Yes --> I["Lead Data Engineer Review & Merge"]
+    H -- No --> J["Flag Incompatibility on PR; Block Merge"]
+```
