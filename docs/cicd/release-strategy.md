@@ -27,3 +27,21 @@ flowchart LR
     F --> G["Publish GitHub Release & Changelog"]
     G --> H["Deploy to Staging / Prod Environments"]
 ```
+
+## 4. Automated Changelog Generation
+
+Using Conventional Commits, release notes are automatically drafted and grouped:
+
+```markdown
+## What's Changed in v2.4.0
+
+### Features (Minor)
+* feat(spark): implement vectorized silver ingestion for orders (@Balasubramanian-pg)
+* feat(contracts): add data contract assertions for shipping address (@Balasubramanian-pg)
+
+### Fixes (Patch)
+* fix(delta): resolve concurrent modification exception on upsert (@Balasubramanian-pg)
+
+### Infrastructure & Operations
+* infra(dabs): upgrade cluster runtime to Databricks Runtime 14.3 LTS
+```
