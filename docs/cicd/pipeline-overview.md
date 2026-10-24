@@ -29,3 +29,26 @@ The delivery pipeline consists of five sequential stages:
 5. **Stage 5: Smoke Testing & Telemetry**
    * Ephemeral test job run verification on Serverless compute.
    * Notification emitted to Slack / PagerDuty upon success or failure.
+
+## 3. End-to-End Workflow Architecture Diagram
+
+```mermaid
+flowchart TD
+    subgraph PR["Pull Request Flow (feature/* -> main)"]
+        PR_TRIG["PR Opened / Synchronized"] --> LINT["Lint & Format (ruff, black, sqlfluff)"]
+        LINT --> TEST["PySpark Unit & Contract Tests (pytest)"]
+        TEST --> VAL["Validate Asset Bundle (bundle validate)"]
+        VAL --> GATES{"All Checks Pass & Lead Approval?"}
+        GATES -- Yes --> MERGE["Squash & Merge into main"]
+        GATES -- No --> BLOCK["PR Blocked"]
+    end
+
+    subgraph CD["Deployment Flow (main branch)"]
+        MERGE --> DEV_DEP["Deploy to Development (dev)"]
+        DEV_DEP --> DEV_TEST["Run Integration Smoke Tests"]
+        DEV_TEST --> STG_PROMO["Promote to Staging (staging)"]
+        STG_PROMO --> STG_GATE{"Staging Approval Gate"}
+        STG_GATE -- Approved --> PROD_DEP["Deploy to Production (prod)"]
+        PROD_DEP --> PROD_SMOKE["Production Canary & Health Check"]
+    end
+```
