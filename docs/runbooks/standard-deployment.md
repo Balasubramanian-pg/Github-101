@@ -29,3 +29,17 @@ flowchart TD
     G -- Yes --> H["Mark Deployment Successful; Notify #data-releases"]
     G -- No --> I["TRIGGER EMERGENCY ROLLBACK RUNBOOK"]
 ```
+
+## 4. Canary Verification & Smoke Testing
+
+Immediately following bundle deployment, the automated CD workflow executes a canary validation job:
+
+```bash
+# Execute canary test job in production workspace
+databricks bundle run orders_etl_canary -t prod
+```
+
+### Verification Checks:
+1. **Delta Commit Check**: Verify `_delta_log` commits a new version within 5 minutes.
+2. **Row Count Assertion**: Confirm canary batch inserted expected test records without error.
+3. **Cluster Health**: Verify job cluster spun up and completed without Spark task retries or shuffle spills.
