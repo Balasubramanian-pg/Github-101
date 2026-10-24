@@ -556,3 +556,15 @@ flowchart TB
     RECON -.-> ALERT
     ALERT -.-> ROLLBACK
 ```
+
+### Role-Based Navigation Matrix
+
+To extract the highest value from this repository, review documents according to your organizational focus:
+
+| Engineering Role | Recommended Document Path | Primary Deliverable |
+| :--- | :--- | :--- |
+| **Lead Platform Architect** | `docs/architecture/*`, `docs/adr/*`, `docs/infrastructure/*` | Multi-cloud architecture, IaC blueprints, compute cost controls |
+| **Senior Data Engineer** | `docs/testing/*`, `docs/devex/*`, `docs/architecture/data-contracts.md` | Pure Spark pipelines, automated testing harnesses, contract enforcement |
+| **DevOps / CI/CD Engineer** | `docs/cicd/*`, `docs/infrastructure/databricks-asset-bundles.md` | GitHub Actions reusable workflows, OIDC security, runner topologies |
+| **Data Reliability Engineer (SRE)** | `docs/runbooks/*`, `docs/integrations/*` | Incident triage, MTTR reduction, zero-data-loss rollback runbooks |
+| **Data Governance & Security Officer** | `SECURITY.md`, `docs/security/*`, `docs/infrastructure/identity-and-access.md` | Principle of least privilege, audit logging, vulnerability remediation |
