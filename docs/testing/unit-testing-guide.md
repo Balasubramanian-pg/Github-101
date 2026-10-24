@@ -73,3 +73,12 @@ Coverage is measured using `pytest-cov` and enforced at **≥85%**:
 ```bash
 pytest --cov=src --cov-report=term-missing --cov-fail-under=85 tests/unit/
 ```
+
+## 5. Unit Testing Anti-Patterns to Avoid
+
+| Anti-Pattern | Why It Fails | Lead Engineer Best Practice |
+| :--- | :--- | :--- |
+| **Connecting to S3/ADLS in unit tests** | Causes flakiness, latency, and requires credentials | Use synthetic in-memory DataFrames |
+| **Using `time.sleep()` in tests** | Slows CI builds indeterministically | Use deterministic condition polling or mocks |
+| **Testing multiple transformations in one test** | Hard to locate exact failure causes | Write single-assertion, focused unit tests |
+| **Calling `.collect()` on large datasets** | Causes local JVM OOM errors | Use `.limit(10)` or small mock datasets |
