@@ -13,3 +13,17 @@ We employ three validation techniques:
 1. **Row Count & Volume Parity**: Verifying Bronze vs Silver row counts after accounting for filtered quarantine records.
 2. **Cryptographic Checksumming**: Hashing conjoined primary keys and critical business values to verify zero mutation.
 3. **Aggregated Financial Rollup Comparison**: Recomputing daily revenue metrics in Gold and comparing against source ledger totals.
+
+## 3. Reconciliation Workflow Diagram
+
+```mermaid
+flowchart TD
+    A["Trigger Reconciliation for Date: 2026-10-24"] --> B["Compute Source / Bronze Partition Stats"]
+    B --> C["Compute Target Silver Table Partition Stats"]
+    C --> D["Calculate Delta Discrepancy Matrix"]
+    D --> E{"Discrepancy == 0?"}
+    E -- Yes --> F["Sign-off: Partition Reconciled Cleanly"]
+    E -- No --> G["Identify Missing / Mismatched Keys"]
+    G --> H["Execute Targeted Idempotent Backfill (replaceWhere)"]
+    H --> C
+```
