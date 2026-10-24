@@ -42,3 +42,21 @@ Please confirm that required validation suites have been executed:
 ```text
 <!-- Paste terminal output from pytest or contract suite here -->
 ```
+
+---
+
+## Deployment & Rollback Strategy
+
+* **Deployment Target**:
+  - [ ] Development (`dev`)
+  - [ ] Staging (`staging`)
+  - [ ] Production (`prod`)
+
+* **Execution Mechanism**:
+  - [ ] Automated DABs bundle deployment (`databricks bundle deploy`)
+  - [ ] Manual backfill workflow execution required
+
+* **Rollback Plan**:
+  <!-- State exact steps to restore previous state if deployment fails -->
+  * Revert commit via git.
+  * Delta Lake time travel restore command: `RESTORE TABLE <table_name> TO VERSION AS OF <version>`
