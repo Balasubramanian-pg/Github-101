@@ -68,3 +68,26 @@ flowchart TD
     G --> H["Sync Jobs & DLT Pipelines to Databricks Workspace"]
     H --> I["databricks bundle run (Smoke Test Run)"]
 ```
+
+## 4. Multi-Environment Target Overrides & Variable Scoping
+
+DABs allow parameterizing environments without code duplication:
+
+```yaml
+variables:
+  catalog:
+    description: "Target Unity Catalog name"
+  worker_count:
+    description: "Number of compute nodes"
+    default: 2
+
+targets:
+  dev:
+    variables:
+      worker_count: 1
+  prod:
+    variables:
+      worker_count: 8
+```
+
+In job definitions, variables are referenced via `${var.catalog}` and `${var.worker_count}`, ensuring development clusters remain small and inexpensive while production scales seamlessly.
