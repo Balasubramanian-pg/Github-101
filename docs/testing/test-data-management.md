@@ -67,3 +67,19 @@ class TestSandbox:
         # Always tear down ephemeral schema regardless of test pass or fail
         self.w.schemas.delete(full_name=f"{self.catalog}.{self.sandbox_id}", cascade=True)
 ```
+
+## 5. Nightly Orphan Reaper Cron & Storage Governance
+
+Despite automated fixture teardown, aborted CI runs or network drops can leave orphaned test catalogs. A nightly maintenance workflow runs at 02:00 UTC:
+
+```sql
+-- Nightly Orphan Reaper Script executed via Databricks Workflows
+-- Drops any test schema older than 24 hours
+DECLARE ORPHAN_SCHEMAS ARRAY<STRING>;
+-- Evaluates schema creation timestamps from system.information_schema
+-- Purges storage containers and drops schemas with CASCADE
+```
+
+### Storage Quota Safeguards
+* Ephemeral test storage is capped at 500GB per developer team.
+* Cloud bucket lifecycle rules enforce a 3-day automatic expiration on all objects under `s3://lakehouse-ci-testing/`.
