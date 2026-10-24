@@ -78,3 +78,10 @@ def test_concurrent_delta_upsert_isolation(spark, ephemeral_schema):
     history_df = spark.sql(f"DESCRIBE HISTORY {target_table}")
     assert history_df.count() >= 2
 ```
+
+## 5. Cost Guardrails & Automated Teardown
+
+To prevent runaway cloud spending during integration testing:
+* **Serverless Compute**: Tests use Serverless Compute with auto-pause to eliminate idle cluster costs.
+* **Max Cluster Duration**: Any non-serverless test cluster enforces an absolute 30-minute auto-termination policy.
+* **Orphan Reaper Cron**: A nightly scheduled workflow sweeps and purges any schemas prefixed with `test_ci_` older than 12 hours.
