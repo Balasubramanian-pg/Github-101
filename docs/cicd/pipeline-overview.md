@@ -52,3 +52,19 @@ flowchart TD
         PROD_DEP --> PROD_SMOKE["Production Canary & Health Check"]
     end
 ```
+
+## 4. Concurrency Controls & Failure Handling
+
+### Concurrency Grouping
+To prevent race conditions and conflicting state updates on cloud clusters, workflows enforce strict concurrency groups:
+```yaml
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+```
+
+### Failure Notifications
+When a pipeline step fails:
+1. GitHub Actions uploads step logs and PySpark error traces as build artifacts (retained for 14 days).
+2. A GitHub PR comment is posted with exact line failure diagnostics.
+3. If on the `main` branch, an alert webhook notifies `#data-ops-alerts` in Slack.
