@@ -27,3 +27,28 @@ flowchart TD
     G --> H["Execute Targeted Idempotent Backfill (replaceWhere)"]
     H --> C
 ```
+
+## 4. Automated Reconciliation PySpark Script
+
+```python
+# scripts/reconciliation_check.py
+from pyspark.sql import SparkSession
+import pyspark.sql.functions as F
+
+def reconcile_orders_partition(spark: SparkSession, partition_date: str):
+    bronze_df = (spark.read.table("prod_lakehouse.bronze.orders")
+                 .filter(F.col("order_date") == partition_date))
+    silver_df = (spark.read.table("prod_lakehouse.silver.orders")
+                 .filter(F.col("order_date") == partition_date))
+    quarantine_df = (spark.read.table("prod_lakehouse.quarantine.orders_dq_breach")
+                     .filter(F.col("order_date") == partition_date))
+    
+    bronze_count = bronze_df.count()
+    silver_count = silver_df.count()
+    quarantine_count = quarantine_df.count()
+    
+    discrepancy = bronze_count - (silver_count + quarantine_count)
+    print(f"Reconciliation for {partition_date}: Discrepancy = {discrepancy}")
+    if discrepancy != 0:
+        raise ValueError(f"CRITICAL: {discrepancy} records unaccounted for!")
+```
