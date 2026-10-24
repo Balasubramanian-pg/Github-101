@@ -55,3 +55,23 @@ sequenceDiagram
         W2-->>W2: Raise ConcurrentModificationException
     end
 ```
+
+## 4. Time Travel, Auditing & Restore Mechanics
+
+Because historical Parquet files are preserved until explicitly pruned by `VACUUM`, any historical state can be queried or restored:
+
+### Querying Historical State
+```python
+# Query table state as of version 4
+df_v4 = spark.read.format("delta").option("versionAsOf", 4).table("silver.orders")
+
+# Query table state as of specific timestamp
+df_ts = spark.read.format("delta").option("timestampAsOf", "2026-10-24 08:00:00").table("silver.orders")
+```
+
+### Point-in-Time Table Restoration
+If bad data is merged into production, the table can be rolled back instantly without recomputing historical data:
+```sql
+-- Immediate atomic rollback in SQL
+RESTORE TABLE silver.orders TO VERSION AS OF 15;
+```
