@@ -48,3 +48,29 @@ flowchart TD
     GRP_DE -->|SELECT, EXECUTE| SCHEMA_SILVER
     GRP_AN -->|SELECT Only| SCHEMA_GOLD
 ```
+
+## 4. Column-Level Masking & Row-Level Filtering
+
+To protect sensitive Personally Identifiable Information (PII) at query time:
+
+### Dynamic Column Masking Function
+```sql
+CREATE OR REPLACE FUNCTION mask_email(email STRING)
+RETURN CASE 
+    WHEN is_account_group_member('grp-compliance-officers') THEN email
+    ELSE concat(substr(email, 1, 2), '****@', split(email, '@')[1])
+END;
+
+-- Apply mask to production table
+ALTER TABLE prod_lakehouse.silver.customers 
+ALTER COLUMN email SET MASK mask_email;
+```
+
+### Row-Level Filter
+```sql
+CREATE OR REPLACE FUNCTION filter_regional_orders(region STRING)
+RETURN is_account_group_member('grp-executives') OR region = current_user_region();
+
+ALTER TABLE prod_lakehouse.gold.orders 
+SET ROW FILTER filter_regional_orders ON (order_region);
+```
