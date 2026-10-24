@@ -31,3 +31,31 @@ flowchart TD
     H -- Exists & Newer Version --> J["UPDATE Conformed Record"]
     H -- Not Found --> K["INSERT New Record"]
 ```
+
+## 4. PySpark Structured Streaming Deduplication Implementation
+
+```python
+from pyspark.sql import DataFrame
+import pyspark.sql.functions as F
+
+def process_idempotent_stream(raw_stream_df: DataFrame) -> DataFrame:
+    """Deduplicate streaming events within a 24-hour event-time watermark."""
+    return (
+        raw_stream_df
+        .withWatermark("event_timestamp", "24 hours")
+        .dropDuplicates(["event_id", "event_timestamp"])
+    )
+
+def merge_to_silver(micro_batch_df: DataFrame, batch_id: int):
+    """Idempotently merge micro-batch into Delta Lake table."""
+    micro_batch_df.createOrReplaceTempView("updates")
+    micro_batch_df._jdf.sparkSession().sql("""
+        MERGE INTO prod_lakehouse.silver.orders AS target
+        USING updates AS source
+        ON target.order_id = source.order_id
+        WHEN MATCHED AND source.updated_at > target.updated_at THEN
+            UPDATE SET *
+        WHEN NOT MATCHED THEN
+            INSERT *
+    """)
+```
