@@ -39,3 +39,14 @@ We enforce a **Zero-Static-Credential Architecture**:
 1. All GitHub Actions workflows authenticate via **OpenID Connect (OIDC)** Workload Identity Federation.
 2. External API tokens and database passwords are stored exclusively in **Azure Key Vault / AWS Secrets Manager**.
 3. Databricks access to secrets is achieved via **Key Vault-backed Databricks Secret Scopes**.
+
+## Consequences
+
+### Positive
+* Complete elimination of static cloud access keys in GitHub repositories.
+* Comprehensive audit trail in CloudTrail / Azure Activity Log for every credential access event.
+* Automated compliance with SOC2, ISO 27001, and HIPAA credential policies.
+
+### Negative & Mitigations
+* Initial infrastructure setup requires IAM Trust Policy and federated credential configuration.
+  * *Mitigation*: Terraform modules in `docs/infrastructure/iac-overview.md` automate federated credential provisioning.
