@@ -59,3 +59,10 @@ def merge_to_silver(micro_batch_df: DataFrame, batch_id: int):
             INSERT *
     """)
 ```
+
+## 5. Idempotency Verification & Chaos Testing
+
+To verify pipeline idempotency before production deployment:
+1. **Replay Testing**: CI integration tests ingest a 10,000-event synthetic batch twice consecutively.
+2. **Assertion Check**: Total row count and partition checksums in Silver must be identical between Run 1 and Run 2.
+3. If duplicate records leak through, the build fails and alerts the Lead Data Engineer.
