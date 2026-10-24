@@ -24,3 +24,9 @@ The platform requires a scalable distributed compute engine capable of handling 
 * **Cold-Start Latency**: Time required to provision ephemeral compute.
 * **Developer Experience**: Local testing, CI integration, and Asset Bundle deployments.
 * **Cost Governance**: Cluster policies, auto-termination, and spot instance utilization.
+
+## Decision
+We select **Databricks with Photon Acceleration and Serverless Compute**:
+* **ETL & Ingestion**: Ephemeral Single-Node or Autoscaling Job Clusters running Photon Runtime.
+* **CI/CD & Integration Testing**: Serverless Compute for near-instant cold-start execution (< 15 seconds).
+* **Ad-hoc & BI Serving**: Databricks Serverless SQL Warehouses.
