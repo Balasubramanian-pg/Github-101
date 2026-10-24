@@ -54,3 +54,17 @@ resources:
             package_name: lakehouse_orders
             entry_point: ingest_bronze
 ```
+
+## 3. Bundle Deployment Lifecycle Diagram
+
+```mermaid
+flowchart TD
+    A["Developer / CI Runner"] --> B["databricks bundle validate"]
+    B --> C{"YAML Syntax & Variables Valid?"}
+    C -- No --> D["Fail Build with Diagnostic Errors"]
+    C -- Yes --> E["databricks bundle build (Package Wheels)"]
+    E --> F["databricks bundle deploy -t [target]"]
+    F --> G["Upload Artifacts to Workspace Files"]
+    G --> H["Sync Jobs & DLT Pipelines to Databricks Workspace"]
+    H --> I["databricks bundle run (Smoke Test Run)"]
+```
