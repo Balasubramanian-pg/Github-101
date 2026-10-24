@@ -30,3 +30,13 @@ flowchart TD
     F -- Yes --> G["Implement Salted Keys / Skew Hints"]
     F -- No --> H["Upgrade to Memory-Optimized VMs (Vertical Scaling)"]
 ```
+
+## 4. Storage Growth Forecasting Formula
+
+Lakehouse storage growth is calculated using:
+
+$$	ext{Projected Storage (TB)} = 	ext{Current Storage} + (	ext{Daily Ingest GB} 	imes 	ext{Days} 	imes 	ext{Compression Factor}) + 	ext{Delta History Overhead}$$
+
+Where:
+* **Parquet Compression Factor**: Typically 0.20 - 0.25 (4x-5x compression from raw JSON).
+* **Delta History Overhead**: Retaining 7 days of historical versions adds approximately 15% - 25% storage overhead.
