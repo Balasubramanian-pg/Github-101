@@ -48,3 +48,13 @@ spark = SparkSession.builder.getOrCreate()
 
 ### Actual Behavior
 <!-- What actually happened (e.g. AnalysisException, SchemaMismatchException, incorrect row count) -->
+
+### Data Blast Radius & Impact Analysis
+
+* **Affected Tables**: <!-- list fully-qualified table names: catalog.schema.table -->
+* **Impacted Partition(s)**: <!-- e.g., date=2026-10-24 -->
+* **Estimated Corrupt Record Count**: <!-- e.g., 50,000 rows -->
+* **Downstream Consumers Impacted**:
+  - [ ] Power BI / Tableau Executive Dashboards
+  - [ ] Customer Feature Store (ML Models)
+  - [ ] External Regulatory Reporting Feeds
