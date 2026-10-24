@@ -43,3 +43,16 @@ databricks bundle run orders_etl_canary -t prod
 1. **Delta Commit Check**: Verify `_delta_log` commits a new version within 5 minutes.
 2. **Row Count Assertion**: Confirm canary batch inserted expected test records without error.
 3. **Cluster Health**: Verify job cluster spun up and completed without Spark task retries or shuffle spills.
+
+## 5. Post-Deployment Sign-Off & Rollback Trigger
+
+### Post-Deployment Sign-Off
+Once the canary passes and the first scheduled batch completes cleanly:
+1. Update deployment ticket status to `Deployed - Verified`.
+2. Post confirmation message in `#data-platform-ops` with commit SHA and release tag.
+
+### Rollback Thresholds
+If any of the following occur within 60 minutes post-deploy, trigger [Emergency Rollback](emergency-rollback.md) immediately:
+* Pipeline task failure with unhandled exception.
+* Downstream Gold BI dashboards reporting missing or corrupt records.
+* Processing latency exceeding SLA by > 50%.
