@@ -16,3 +16,18 @@ We establish a clear boundary between Terraform and Databricks Asset Bundles (DA
 | **Cloud Foundation** | **Terraform** | VPCs, Subnets, NAT Gateways, Storage Accounts, Cloud IAM Roles, KMS Keys | Monthly / As Needed |
 | **Workspace Governance** | **Terraform** | Databricks Workspaces, Unity Catalog Metastores, Cloud Storage Credentials | Bi-Weekly |
 | **Data Pipelines & Jobs**| **Databricks Asset Bundles**| Workflows, Pipelines, Notebooks, Spark Tasks, Cluster Policies | Daily / Per PR |
+
+## 3. Terraform Directory Layout
+
+```text
+terraform/
+├── modules/
+│   ├── networking/          # VPC, Private Subnets, Route Tables
+│   ├── storage/             # ADLS Gen2 / AWS S3 buckets, KMS encryption
+│   ├── unity_catalog/       # Metastore, storage credentials, external locations
+│   └── iam_roles/           # OIDC federated trust roles, service principals
+└── environments/
+    ├── dev/                 # Development environment state & variables
+    ├── staging/             # Pre-production environment state & variables
+    └── prod/                # Production environment state & variables
+```
