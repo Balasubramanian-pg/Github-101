@@ -26,3 +26,30 @@ def ephemeral_schema(spark):
     yield schema_name
     spark.sql(f"DROP SCHEMA dev_lakehouse.{schema_name} CASCADE")
 ```
+
+## 3. Integration Test Execution Flow Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant CI as GitHub Actions Runner
+    participant DBR as Databricks Serverless Compute
+    participant S3 as Test Cloud Storage
+    participant UC as Unity Catalog (Metadata)
+
+    CI->>UC: Create Ephemeral Schema (test_ci_9a8b7c)
+    CI->>S3: Upload synthetic input files to test landing zone
+    CI->>DBR: Trigger pipeline with schema=test_ci_9a8b7c
+    DBR->>S3: Auto Loader reads landing files
+    DBR->>UC: Write Bronze and Silver Delta tables
+    CI->>DBR: Query and assert row counts, deduplication, and constraints
+    alt Assertions Pass
+        CI->>UC: DROP SCHEMA test_ci_9a8b7c CASCADE
+        CI->>S3: Purge test files
+        CI-->>CI: Mark Integration Test SUCCESS
+    else Assertions Fail
+        CI->>DBR: Capture table logs & transaction history
+        CI->>UC: Preserve schema for 24h debugging
+        CI-->>CI: Mark Integration Test FAILED
+    end
+```
