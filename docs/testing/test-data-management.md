@@ -45,3 +45,25 @@ stateDiagram-v2
     }
     Teardown --> [*]: Clean Working Tree
 ```
+
+## 4. Automated Sandbox Teardown Automation
+
+```python
+# tests/helpers/sandbox_manager.py
+import uuid
+from databricks.sdk import WorkspaceClient
+
+class TestSandbox:
+    def __init__(self, w: WorkspaceClient):
+        self.w = w
+        self.sandbox_id = f"test_{uuid.uuid4().hex[:8]}"
+        self.catalog = "dev_lakehouse"
+        
+    def __enter__(self):
+        self.w.schemas.create(name=self.sandbox_id, catalog_name=self.catalog)
+        return self.sandbox_id
+        
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Always tear down ephemeral schema regardless of test pass or fail
+        self.w.schemas.delete(full_name=f"{self.catalog}.{self.sandbox_id}", cascade=True)
+```
