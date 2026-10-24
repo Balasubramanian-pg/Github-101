@@ -26,3 +26,8 @@ The platform requires an orchestrator to manage CI/CD pipelines, automated testi
 | **Identity & Security (4)** | 3/5 (Static credentials / IAM roles) | **5/5 (Keyless OIDC federation)** |
 | **Cost Efficiency (4)** | 2/5 (Always-on worker instances) | **5/5 (Zero idle cost)** |
 | **Spark Native Orchestration (4)** | 3/5 (External API polling) | **5/5 (Databricks Workflows native)** |
+
+## Decision
+We adopt a **Two-Tier Orchestration Architecture**:
+1. **GitHub Actions**: Serves as the primary deployment and verification orchestrator. Handles linting, unit testing, contract assertions, container builds, and Databricks Asset Bundle deployment (`databricks bundle deploy`).
+2. **Databricks Workflows**: Serves as the internal DAG scheduler for distributed Spark pipelines, multi-task dependencies, and continuous streaming jobs.
