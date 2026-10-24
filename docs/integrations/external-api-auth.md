@@ -42,3 +42,39 @@ sequenceDiagram
         DBR->>API: Retry request after backoff pause
     end
 ```
+
+## 4. Resilient Python API Client with Backoff & Jitter
+
+```python
+import time
+import random
+import requests
+
+class ResilientApiClient:
+    def __init__(self, base_url: str, token_provider):
+        self.base_url = base_url
+        self.token_provider = token_provider
+        self.session = requests.Session()
+
+    def get_with_retry(self, endpoint: str, max_retries: int = 5) -> dict:
+        url = f"{self.base_url}/{endpoint}"
+        retries = 0
+        while retries < max_retries:
+            token = self.token_provider.get_valid_token()
+            headers = {"Authorization": f"Bearer {token}", "Accept": "application/json"}
+            response = self.session.get(url, headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                return response.json()
+            elif response.status_code == 429: # Rate Limited
+                retry_after = int(response.headers.get("Retry-After", 2 ** retries))
+                jitter = random.uniform(0.1, 1.0)
+                time.sleep(retry_after + jitter)
+                retries += 1
+            elif response.status_code >= 500: # Transient Server Error
+                time.sleep((2 ** retries) + random.uniform(0.1, 0.5))
+                retries += 1
+            else:
+                response.raise_for_status()
+        raise TimeoutError(f"API request failed after {max_retries} retries.")
+```
