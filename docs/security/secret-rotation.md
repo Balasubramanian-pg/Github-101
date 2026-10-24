@@ -15,3 +15,22 @@ This runbook establishes standard operating procedures for scheduled and emergen
 | **Database Service Accounts** | Azure Key Vault / AWS Secrets Manager | **Every 90 days** | Automated via Cloud Function |
 | **Third-Party API Tokens (SaaS)**| Databricks Secret Scope | **Every 180 days** | Semi-automated with validation |
 | **KMS Customer Managed Keys** | Cloud KMS | **Annually (365 days)** | Automated cloud key rotation |
+
+## 3. Zero-Downtime Dual-Key Rotation Sequence
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant SEC as Security Engineer / Cloud Automator
+    participant KV as Azure Key Vault / AWS Secrets Manager
+    participant EXT as External Service / Database
+    participant DBR as Databricks Spark Pipeline
+
+    SEC->>EXT: Generate Secondary Credential (Key B)
+    SEC->>KV: Store Key B as 'secret-name-secondary'
+    SEC->>DBR: Trigger rolling secret cache refresh (Worker reads Key B)
+    DBR->>EXT: Verify authentication succeeds using Key B
+    SEC->>KV: Promote Key B to 'secret-name-primary'
+    SEC->>EXT: Revoke / Destroy Primary Credential (Key A)
+    SEC->>SEC: Confirm zero authentication failures in telemetry logs
+```
