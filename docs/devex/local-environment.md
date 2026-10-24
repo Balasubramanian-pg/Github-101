@@ -78,3 +78,15 @@ For engineers preferring a fully hermetic containerized environment, open the re
   "postCreateCommand": "uv sync --dev && pre-commit install"
 }
 ```
+
+## 5. Troubleshooting Local PySpark & JVM Conflicts
+
+### Common Issue 1: `JAVA_HOME is not set`
+Set `JAVA_HOME` in your shell configuration (`~/.zshrc` or `~/.bashrc`):
+```bash
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17"
+export PATH="$JAVA_HOME/bin:$PATH"
+```
+
+### Common Issue 2: `NativeCodeLoader: Unable to load native-hadoop library`
+This is an informational warning and does not impact local unit tests. The local PySpark session fixture in `tests/conftest.py` suppresses native Hadoop warnings safely.
