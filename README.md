@@ -568,3 +568,16 @@ To extract the highest value from this repository, review documents according to
 | **DevOps / CI/CD Engineer** | `docs/cicd/*`, `docs/infrastructure/databricks-asset-bundles.md` | GitHub Actions reusable workflows, OIDC security, runner topologies |
 | **Data Reliability Engineer (SRE)** | `docs/runbooks/*`, `docs/integrations/*` | Incident triage, MTTR reduction, zero-data-loss rollback runbooks |
 | **Data Governance & Security Officer** | `SECURITY.md`, `docs/security/*`, `docs/infrastructure/identity-and-access.md` | Principle of least privilege, audit logging, vulnerability remediation |
+
+### Production Readiness & Platform Health Targets
+
+The platform implements strict Service Level Indicators (SLIs) and Objectives (SLOs):
+
+* **Deployment Frequency**: ≥ 5 automated releases per week across micro-pipelines.
+* **Lead Time for Changes**: < 30 minutes from approved PR to production staging.
+* **Change Failure Rate**: < 1.0% of deployments requiring emergency rollback.
+* **Mean Time to Recovery (MTTR)**: < 15 minutes utilizing Delta Lake time travel and automated bundle rollback.
+* **Data Freshness SLO**: 99.9% of data landed in Gold within 60 minutes of upstream emission.
+* **Data Contract Compliance**: 100% enforcement; zero schema drift without explicit semantic version increment.
+
+For contribution standards, proceed to [CONTRIBUTING.md](CONTRIBUTING.md). For vulnerability reporting, see [SECURITY.md](SECURITY.md).
