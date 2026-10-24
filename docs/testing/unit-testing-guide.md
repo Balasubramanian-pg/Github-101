@@ -59,3 +59,17 @@ def test_conform_orders_cleanses_status_and_timestamps(spark):
     expected_df = spark.createDataFrame(expected_data, schema=input_schema)
     assert_df_equality(result_df, expected_df, ignore_row_order=True)
 ```
+
+## 4. Edge Case Matrix & Code Coverage Thresholds
+
+Unit tests must explicitly assert edge cases:
+* **Nullability**: Columns containing all `NULL` or mixed `NULL` values.
+* **Empty DataFrames**: Pipelines must handle 0-row inputs gracefully without raising exceptions.
+* **String Edge Cases**: Leading/trailing whitespace, non-ASCII characters, and empty strings.
+* **Numeric Extremes**: Negative amounts, divide-by-zero scenarios, and decimal precision overflows.
+
+### Code Coverage Gate
+Coverage is measured using `pytest-cov` and enforced at **≥85%**:
+```bash
+pytest --cov=src --cov-report=term-missing --cov-fail-under=85 tests/unit/
+```
