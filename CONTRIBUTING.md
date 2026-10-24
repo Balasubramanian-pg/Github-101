@@ -34,3 +34,29 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 * **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
 * **Scopes**: `spark`, `delta`, `dabs`, `iac`, `dq`, `catalog`, `security`, `runbook`.
 * **Example**: `feat(spark): implement vectorized bronze ingestion for orders telemetry`
+
+## 4. Coding & Engineering Standards
+
+### Python & PySpark Guidelines
+* **Type Annotations**: All functions must have complete type hints validated with `mypy`.
+* **Pure Transformation Functions**: Isolate PySpark transformations into pure functions accepting and returning `DataFrame`. Avoid side effects.
+* **Avoid Python UDFs**: Use native Spark SQL functions or Pandas UDFs (vectorized with Arrow) when custom scalar logic is unavoidable.
+* **Linting & Formatting**: Enforced via `ruff` and `black`. Line length is set to 100 characters.
+
+```python
+# Standard Pure Transformation Signature
+from pyspark.sql import DataFrame
+import pyspark.sql.functions as F
+
+def transform_silver_orders(bronze_df: DataFrame) -> DataFrame:
+    """Conform and enrich orders from bronze to silver layer."""
+    return (
+        bronze_df
+        .filter(F.col("order_id").isNotNull())
+        .withColumn("processed_at", F.current_timestamp())
+    )
+```
+
+### SQL Standards
+* Use ANSI SQL standards validated via `sqlfluff` configured for Databricks / Spark SQL dialect.
+* All keywords must be UPPERCASE. Indentation is 4 spaces.
