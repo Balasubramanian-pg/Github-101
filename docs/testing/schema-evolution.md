@@ -44,3 +44,30 @@ sequenceDiagram
         DEV->>BRZ: Stop writing to 'user_name' (Set to NULL or drop)
     end
 ```
+
+## 4. Controlled Evolution Implementation in PySpark
+
+To safely ingest additive columns into Delta Lake:
+
+```python
+# Controlled schema evolution write configuration
+(conformed_df.write
+    .format("delta")
+    .mode("append")
+    .option("mergeSchema", "true")  # Allows additive nullable columns
+    .saveAsTable("silver.orders"))
+```
+
+### Pre-Merge CI Schema Compatibility Test
+A dedicated CI test verifies PR schema compatibility against production schemas:
+```python
+def test_schema_backward_compatibility(spark):
+    prod_schema = spark.read.table("prod_lakehouse.silver.orders").schema
+    pr_schema = get_current_pipeline_schema()
+    
+    # Assert all prod columns exist in PR schema with matching data types
+    for field in prod_schema.fields:
+        assert field.name in pr_schema.fieldNames(), f"Breaking: Column {field.name} was removed!"
+        pr_field = pr_schema[field.name]
+        assert pr_field.dataType == field.dataType, f"Breaking: Type changed for {field.name}"
+```
