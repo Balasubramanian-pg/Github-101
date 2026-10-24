@@ -31,3 +31,10 @@ terraform/
     ├── staging/             # Pre-production environment state & variables
     └── prod/                # Production environment state & variables
 ```
+
+## 4. State Management & Concurrency Locking
+
+Terraform remote state is stored securely in encrypted cloud storage with distributed locking:
+* **Storage Backend**: AWS S3 with AES-256 server-side encryption and bucket versioning / Azure Blob Storage.
+* **State Locking**: DynamoDB table locking / Azure Blob lease prevents concurrent conflicting executions.
+* **Access Control**: State buckets require MFA and exclude direct human write permissions.
