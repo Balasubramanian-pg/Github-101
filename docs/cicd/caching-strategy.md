@@ -24,3 +24,26 @@ We cache at three distinct layers:
     restore-keys: |
       ${{ runner.os }}-pip-
 ```
+
+## 3. Cache Key Resolution & Restoration Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant RUN as GitHub Actions Runner
+    participant GHC as GitHub Actions Cache Storage
+    participant PIP as PyPI / Package Repository
+
+    RUN->>GHC: Check exact key: OS-pip-[hash(pyproject.toml)]
+    alt Exact Cache Hit
+        GHC-->>RUN: Restore cached wheel directory (10s)
+        RUN->>RUN: Fast install from cache (No network)
+    else Exact Cache Miss, Prefix Hit
+        GHC-->>RUN: Restore prefix key: OS-pip- (15s)
+        RUN->>PIP: Download only delta packages (25s)
+        RUN->>GHC: Save updated cache key on job success
+    else Complete Cache Miss
+        RUN->>PIP: Full package download & compilation (180s)
+        RUN->>GHC: Save initial cache key
+    end
+```
