@@ -31,3 +31,14 @@ The platform requires an orchestrator to manage CI/CD pipelines, automated testi
 We adopt a **Two-Tier Orchestration Architecture**:
 1. **GitHub Actions**: Serves as the primary deployment and verification orchestrator. Handles linting, unit testing, contract assertions, container builds, and Databricks Asset Bundle deployment (`databricks bundle deploy`).
 2. **Databricks Workflows**: Serves as the internal DAG scheduler for distributed Spark pipelines, multi-task dependencies, and continuous streaming jobs.
+
+## Consequences
+
+### Positive
+* Single pane of glass: Code, CI, and deployment definitions reside in the same repository.
+* Elimination of always-on orchestration VM infrastructure saves an estimated $7,500 annually per environment.
+* Fast deployment loops: Changes tested and deployed via standard PR merges.
+
+### Negative & Mitigations
+* Complex multi-platform dependency chaining across non-Databricks systems is limited.
+  * *Mitigation*: Trigger external APIs via GitHub Actions webhooks or lightweight Cloud Functions when required.
