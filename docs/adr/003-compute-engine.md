@@ -17,3 +17,10 @@ The platform requires a scalable distributed compute engine capable of handling 
 3. **Snowflake**
    * Excellent for SQL transformations and data warehousing.
    * Higher cost for heavy unstructured/semi-structured file processing and custom Python logic.
+
+## Evaluation Criteria
+
+* **Execution Performance**: Vectorized execution capability for complex aggregations.
+* **Cold-Start Latency**: Time required to provision ephemeral compute.
+* **Developer Experience**: Local testing, CI integration, and Asset Bundle deployments.
+* **Cost Governance**: Cluster policies, auto-termination, and spot instance utilization.
