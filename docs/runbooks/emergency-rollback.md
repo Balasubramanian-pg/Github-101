@@ -60,3 +60,13 @@ git revert HEAD --no-edit
 git push origin main
 # CD workflow deploys stable bundle automatically
 ```
+
+## 5. Post-Rollback Data Verification & Incident Review
+
+### Integrity Verification
+1. Run [Data Reconciliation Runbook](data-reconciliation.md) across restored partitions.
+2. Verify row counts match expectations prior to incident start time.
+3. Validate that downstream BI dashboards are showing consistent metrics.
+
+### Incident Review
+Initiate blameless incident review within 24 hours in accordance with [Incident Response Runbook](incident-response.md).
