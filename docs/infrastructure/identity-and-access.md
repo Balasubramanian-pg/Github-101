@@ -24,3 +24,27 @@ Metastore (Single per Cloud Region)
 * **Catalog Owner**: Domain lead data engineer managing schemas and table creation rights.
 * **Data Steward**: Senior engineer managing data quality and column masking policies.
 * **Data Analyst / BI**: Read-only access to curated Gold schemas.
+
+## 3. RBAC & Service Principal Architecture Diagram
+
+```mermaid
+flowchart TD
+    subgraph IdentityProvider["Enterprise IdP (Entra ID / Okta)"]
+        SP_CI["Service Principal: sp-github-actions-cd"]
+        GRP_DE["Group: grp-data-engineers"]
+        GRP_AN["Group: grp-data-analysts"]
+    end
+
+    subgraph UnityCatalog["Unity Catalog Governance Engine"]
+        META["Regional Metastore"]
+        CAT_DEV["Catalog: dev_lakehouse"]
+        CAT_PROD["Catalog: prod_lakehouse"]
+        SCHEMA_SILVER["Schema: prod_lakehouse.silver"]
+        SCHEMA_GOLD["Schema: prod_lakehouse.gold"]
+    end
+
+    SP_CI -->|OWNER / ALL PRIVILEGES| CAT_PROD
+    GRP_DE -->|ALL PRIVILEGES| CAT_DEV
+    GRP_DE -->|SELECT, EXECUTE| SCHEMA_SILVER
+    GRP_AN -->|SELECT Only| SCHEMA_GOLD
+```
