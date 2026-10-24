@@ -10,3 +10,28 @@ Our platform maintains three physically isolated cloud environments:
 | **Development (`dev`)** | Feature development and unit validation | `dev_lakehouse` | Data Engineers (Read/Write) |
 | **Staging (`staging`)** | Pre-production integration & load testing | `staging_lakehouse` | CI/CD Service Principal only |
 | **Production (`prod`)** | Live business-critical serving & BI | `prod_lakehouse` | Automated CD only; Zero human write |
+
+## 2. Promotion Gates and Approvals
+
+Promotion between environments is controlled by GitHub Environment Protection Rules:
+
+```
+[Feature Branch] 
+      │ 
+      ▼ (Automated PR Checks)
+[Main Branch] 
+      │
+      ▼ (Automatic Deploy)
+[Development Environment]
+      │
+      ▼ (Automated Integration Tests Pass)
+[Staging Environment]
+      │
+      ▼ (Manual Gate: Lead Data Engineer + Automated Canary Pass)
+[Production Environment]
+```
+
+### Gate Requirements for Production
+1. **Required Approvers**: At least one designated Lead Data Engineer must approve the GitHub Environment deployment.
+2. **Wait Timer**: 5-minute stabilization pause before promoting to production.
+3. **Branch Protection**: Production deployments are strictly restricted to the `main` branch or signed `release/*` tags.
