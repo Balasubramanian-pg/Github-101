@@ -50,3 +50,28 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
 ```
+
+## 4. Pre-Commit Execution Flow Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant DEV as Data Engineer
+    participant GIT as Git Commit Command
+    participant PC as Pre-Commit Runner (Local)
+    participant CI as GitHub Actions CI Check
+
+    DEV->>GIT: git commit -m "feat(spark): add silver transformation"
+    GIT->>PC: Trigger pre-commit hook
+    PC->>PC: Execute Ruff (Lint + Isort) in 0.2s
+    PC->>PC: Execute Black (Formatting) in 0.4s
+    PC->>PC: Execute SQLFluff (Spark SQL Dialect) in 1.1s
+    alt Any Style Violations Detected
+        PC-->>DEV: Auto-fix applied or errors highlighted. Commit ABORTED.
+        DEV->>GIT: Review diff and re-commit
+    else All Checks Pass cleanly
+        PC-->>GIT: Allow commit to proceed (< 2.0s total)
+        DEV->>CI: Push branch to GitHub
+        CI->>CI: Re-verify linting in CI; Green status check
+    end
+```
