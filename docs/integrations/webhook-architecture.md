@@ -64,3 +64,13 @@ def verify_github_webhook(payload_body: bytes, signature_header: str, secret_tok
     # Use hmac.compare_digest to prevent timing attacks
     return hmac.compare_digest(f"sha256={expected_hash}", signature_header)
 ```
+
+## 5. Dead-Letter Queues (DLQ) & Alerting Controls
+
+### Dead-Letter Queue Policy
+* Events that fail schema parsing or business validation after **3 retry attempts** are routed directly to `dlq-webhook-events`.
+* The DLQ retains failed payloads for 14 days with full header metadata.
+
+### Operational Alerting
+* CloudWatch / Azure Monitor alarm triggers if `DLQ.ApproximateNumberOfMessagesVisible > 0`.
+* On-call engineer follows [Alert Triage Runbook](../runbooks/alert-triage.md) to inspect quarantined payloads and re-drive them once remediated.
