@@ -12,3 +12,25 @@ Testing distributed data pipelines requires realistic, high-volume, and structur
 We leverage two complementary tools for mock data generation:
 1. **Faker / Mimesis**: Ideal for generating realistic scalar entity attributes (names, addresses, UUIDs) for unit test fixtures.
 2. **Databricks Labs Data Generator (`dbldatagen`)**: Native distributed data synthesis on Spark for multi-million row integration and performance tests.
+
+## 3. High-Volume Synthetic Data Generation Recipe
+
+Using `dbldatagen`, we synthesize millions of realistic order transactions directly on Spark:
+
+```python
+import dbldatagen as dg
+from pyspark.sql import SparkSession
+
+def generate_mock_orders(spark: SparkSession, row_count: int = 1_000_000):
+    data_spec = (
+        dg.DataGenerator(spark, rows=row_count, partitions=8, randomSeed=42)
+        .withIdForTable()
+        .withColumn("order_id", "string", template="ORD-%08d")
+        .withColumn("customer_id", "string", template="CUST-%06d", random=True)
+        .withColumn("order_status", "string", values=["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"], 
+                    weights=[0.1, 0.2, 0.4, 0.25, 0.05])
+        .withColumn("total_amount", "decimal(10,2)", minValue=5.00, maxValue=2500.00, random=True)
+        .withColumn("order_date", "date", begin="2026-01-01", end="2026-10-24", random=True)
+    )
+    return data_spec.build()
+```
