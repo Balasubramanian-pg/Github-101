@@ -79,3 +79,17 @@ Streaming ingest pipelines utilize Databricks Auto Loader (`cloudFiles`) with co
 
 ### Quarantine & Dead-Letter Queue
 Records failing schema validation or contract expectations are flagged with failure reasons (`FAILED_NOT_NULL`, `OUT_OF_RANGE`) and written directly to a quarantine schema. This guarantees zero pipeline halts for non-fatal payload drift while preserving full auditability.
+
+## 5. Architectural Cross-References & Operational SLA
+
+| Component | Architecture Reference | Operational Runbook |
+| :--- | :--- | :--- |
+| **Data Contracts** | [Data Contracts](data-contracts.md) | [Data Reconciliation](../runbooks/data-reconciliation.md) |
+| **State Management** | [State Management](state-management.md) | [Emergency Rollback](../runbooks/emergency-rollback.md) |
+| **Compute Engine** | [Compute Decision (ADR-003)](../adr/003-compute-engine.md) | [Capacity Planning](../runbooks/capacity-planning.md) |
+| **CI/CD Deployment** | [Pipeline Overview](../cicd/pipeline-overview.md) | [Standard Deployment](../runbooks/standard-deployment.md) |
+
+### SLA Matrix
+* **Bronze Freshness**: P95 < 5 minutes.
+* **Silver Availability**: P95 < 20 minutes from event generation.
+* **Gold BI Refresh**: Completed daily by 04:00 UTC with 99.9% reliability.
