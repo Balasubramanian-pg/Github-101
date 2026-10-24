@@ -47,3 +47,16 @@ sequenceDiagram
         RUN->>GHC: Save initial cache key
     end
 ```
+
+## 4. Cache Invalidation and Poisoning Prevention
+
+### Deterministic Hash Invalidation
+Cache keys incorporate a cryptographic SHA-256 hash of lockfiles. Modifying a single dependency version in `pyproject.toml` automatically generates a new key, preventing stale dependencies:
+```yaml
+key: ${{ runner.os }}-venv-${{ hashFiles('poetry.lock') }}
+```
+
+### Poisoning Mitigation
+To protect against supply chain poisoning:
+* Cache writes are restricted to the default branch (`main`).
+* Pull requests from forks cannot read or write to internal repository caches.
