@@ -31,3 +31,17 @@ flowchart TD
     I -- Yes --> J["Apply targeted runbook mitigation"]
     I -- No --> K["TRIGGER EMERGENCY ROLLBACK RUNBOOK"]
 ```
+
+## 4. Diagnostic Runbook Recipes
+
+### Recipe 1: Triaging Out of Memory (OOM)
+1. Navigate to Databricks Workspace -> **Compute** -> Target Cluster -> **Spark UI**.
+2. Click **Executors** tab. Check for `Exit code 137` (SIGKILL by OS kernel due to container memory limit).
+3. If OOM is caused by data skew, inspect SQL query plan for large broadcast joins without broadcast thresholds.
+
+### Recipe 2: Triaging CloudFiles Auto Loader Failures
+```python
+# Inspect Auto Loader streaming checkpoint state
+checkpoint_df = spark.read.format("delta").load("s3://lakehouse-checkpoints/bronze/orders/offsets")
+display(checkpoint_df.orderBy(F.col("batchId").desc()).limit(5))
+```
