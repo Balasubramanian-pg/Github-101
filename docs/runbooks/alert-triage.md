@@ -15,3 +15,19 @@ This runbook guides on-call engineers through triaging alerts, differentiating a
 | **`SparkException: Job aborted due to stage failure`** | Worker node failure or memory leak | Inspect Spark UI executor tab for Out of Memory (OOM) |
 | **`DeltaConcurrentModificationException`** | Conflicting file compaction / update | Check if OPTIMIZE job collided with batch write |
 | **`CloudFilesSourceException`** | Corrupt JSON/Parquet file in landing storage | Move file to quarantine storage; unblock stream |
+
+## 3. On-Call Triage Decision Tree
+
+```mermaid
+flowchart TD
+    A["PagerDuty Alert Fires"] --> B{"Is production data flow halted?"}
+    B -- No --> C["Check if error is transient (e.g. 1 task retry)"]
+    C --> D{"Did retry succeed?"}
+    D -- Yes --> E["Log note in daily ops handoff; Close alert"]
+    D -- No --> F["Escalate to P2 ticket"]
+    B -- Yes --> G["DECLARE P0/P1 INCIDENT"]
+    G --> H["Check Spark UI Driver / Executor Logs"]
+    H --> I{"Is root cause identifiable?"}
+    I -- Yes --> J["Apply targeted runbook mitigation"]
+    I -- No --> K["TRIGGER EMERGENCY ROLLBACK RUNBOOK"]
+```
