@@ -51,3 +51,18 @@ We enforce three core cluster policies across the enterprise:
   }
 }
 ```
+
+## 4. Policy Inheritance & Enforcement Flow
+
+```mermaid
+flowchart TD
+    A["Developer opens Databricks UI / API"] --> B["Select Compute Creation"]
+    B --> C["Select Policy: Personal Interactive"]
+    C --> D{"Policy Validation Check"}
+    D -- User tries 10 workers --> E["REJECT: Single-node policy allows 0 workers"]
+    D -- User selects auto-terminate 15 min --> F["APPROVE: Cluster Created"]
+    F --> G["Cluster runs notebook session"]
+    G --> H{"Idle for 15 minutes?"}
+    H -- Yes --> I["Auto-terminate cluster (Saves cloud DBU cost)"]
+    H -- No --> G
+```
