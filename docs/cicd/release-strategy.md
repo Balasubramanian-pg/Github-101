@@ -45,3 +45,15 @@ Using Conventional Commits, release notes are automatically drafted and grouped:
 ### Infrastructure & Operations
 * infra(dabs): upgrade cluster runtime to Databricks Runtime 14.3 LTS
 ```
+
+## 5. Hotfix Protocol & Release Rollback
+
+### Emergency Hotfix Process
+1. Cut hotfix branch from production release tag: `git switch -c hotfix/v2.4.1 v2.4.0`.
+2. Apply minimal remediation and verify in unit/integration tests.
+3. Fast-track approval by Lead Data Engineer.
+4. Merge hotfix to `main` and cherry-pick to release branch.
+5. Auto-tag `v2.4.1` and trigger production CD.
+
+### Rollback Protocol
+In case of release failure, proceed immediately to [Emergency Rollback Runbook](../runbooks/emergency-rollback.md).
