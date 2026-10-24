@@ -78,3 +78,12 @@ class ResilientApiClient:
                 response.raise_for_status()
         raise TimeoutError(f"API request failed after {max_retries} retries.")
 ```
+
+## 5. Security & Log Scrubbing Protocols
+
+### Zero-Logging of Credentials
+* HTTP headers containing `Authorization: Bearer ...` or `X-API-Key` are automatically scrubbed by custom logging filters before printing to Spark driver stdout.
+* Stack traces thrown by HTTP exceptions are sanitized to redact query parameters and token strings.
+
+### Secret Rotation Integration
+When an external API credential is rotated in Azure Key Vault / AWS Secrets Manager, refer to [Secret Rotation Runbook](../security/secret-rotation.md) to ensure zero pipeline downtime.
