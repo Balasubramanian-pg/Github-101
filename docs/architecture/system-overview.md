@@ -33,3 +33,28 @@ Our data architecture adheres to five foundational tenets:
 * **Purpose**: High-performance analytical consumption for BI dashboards, reporting, and ML feature stores.
 * **Structure**: Dimensional models (Kimball Star Schema: Fact and Dimension tables) and aggregated rollups.
 * **Optimization**: Z-ORDER indexing or Liquid Clustering on high-cardinality filter and join columns.
+
+## 3. End-to-End Data Movement Sequence
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant SRC as Upstream Sources (API / DB / Kafka)
+    participant RAW as Cloud Storage (Landing Zone)
+    participant BRZ as Bronze Delta Table
+    participant SLV as Silver Delta Table
+    participant QRN as Quarantine Table
+    participant GLD as Gold Star Schema
+    participant CON as BI & ML Consumers
+
+    SRC->>RAW: Ingest files / events (Streaming / Micro-batch)
+    RAW->>BRZ: Auto Loader (CloudFiles) ingestion with metadata tags
+    BRZ->>SLV: PySpark Conforming & Contract Enforcement
+    alt Data Contract Failure
+        SLV->>QRN: Route invalid records with error codes
+    else Data Contract Success
+        SLV->>SLV: Upsert (MERGE INTO) conformed entities
+    end
+    SLV->>GLD: Dimensional Aggregations & SCD Type 2 logic
+    GLD->>CON: Low-latency queries via Photon Engine / SQL Warehouses
+```
