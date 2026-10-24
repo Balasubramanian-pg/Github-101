@@ -15,3 +15,19 @@ We implement deduplication across two strategic boundaries:
 | :--- | :--- | :--- | :--- |
 | **Bronze Streaming Ingest** | Spark Streaming `dropDuplicates()` with Watermarking | 48-hour event watermark | In-memory state store (RocksDB) |
 | **Silver Lakehouse Merge** | Delta Lake `MERGE INTO` with deterministic key matching | Complete table history | Zero runtime state overhead |
+
+## 3. Watermarking & Deduplication Flow Diagram
+
+```mermaid
+flowchart TD
+    A["Incoming Event Stream (Kafka / Event Hubs)"] --> B["Watermark Evaluation: event_time - INTERVAL 24 HOURS"]
+    B --> C["State Store Lookup (RocksDB by event_id)"]
+    C --> D{"Seen in Watermark Window?"}
+    D -- Yes (Duplicate) --> E["DROP EVENT (Increment duplicate_counter)"]
+    D -- No (New Event) --> F["Write to State Store & Emit to Micro-batch"]
+    F --> G["Delta Lake Upsert: MERGE INTO silver.orders"]
+    G --> H{"Target Record Exists?"}
+    H -- Exists & Identical Version --> I["NO-OP (Skip Write)"]
+    H -- Exists & Newer Version --> J["UPDATE Conformed Record"]
+    H -- Not Found --> K["INSERT New Record"]
+```
