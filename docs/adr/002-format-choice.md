@@ -27,3 +27,8 @@ A modern lakehouse requires an open, performant, and standardized table format t
 | **Liquid Clustering** | **Yes (Automatic)** | Partition Evolution | Clustering Service |
 | **Cross-Format Read (UniForm)** | **Yes (Generates Iceberg metadata)**| No | No |
 | **Governance Integration** | **Native Unity Catalog** | External Catalogs | External Catalogs |
+
+## Decision
+We select **Delta Lake with Universal Format (UniForm)** enabled as our primary storage format.
+
+By configuring Delta UniForm, the storage layer writes Delta transaction logs while automatically generating Apache Iceberg metadata in the background. This delivers top-tier performance on Databricks Photon while preserving cross-engine read capabilities for Trino and external query engines without duplicating Parquet data files.
