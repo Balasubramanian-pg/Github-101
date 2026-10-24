@@ -40,3 +40,11 @@ $$	ext{Projected Storage (TB)} = 	ext{Current Storage} + (	ext{Daily Ingest GB} 
 Where:
 * **Parquet Compression Factor**: Typically 0.20 - 0.25 (4x-5x compression from raw JSON).
 * **Delta History Overhead**: Retaining 7 days of historical versions adds approximately 15% - 25% storage overhead.
+
+## 5. Semi-Annual Capacity Review Checklist
+
+Every 6 months, the Lead Data Engineer conducts an architectural capacity review:
+- [ ] Evaluate instance family pricing (Check for newly available AWS Graviton / Azure v5 instances).
+- [ ] Audit top 10 most expensive Databricks jobs in `system.billing.usage`.
+- [ ] Verify S3 Intelligent-Tiering / Azure Blob lifecycle policies are active on Bronze landing buckets.
+- [ ] Present 12-month budget forecast to Engineering Leadership.
