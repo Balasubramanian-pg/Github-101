@@ -49,3 +49,12 @@ flowchart TD
     H -- Yes --> I["Lead Data Engineer Review & Merge"]
     H -- No --> J["Flag Incompatibility on PR; Block Merge"]
 ```
+
+## 4. Databricks Runtime (DBR) System Library Compatibility
+
+Databricks Runtimes come with pre-installed Python libraries (e.g. `numpy`, `pandas`, `pyarrow`). Overriding these with incompatible versions causes JVM segmentation faults.
+
+### Safe Compatibility Rules:
+* Always cross-reference the target Databricks Runtime Release Notes (e.g. **DBR 14.3 LTS** includes Python 3.10.12, PySpark 3.5.0, PyArrow 14.0.1).
+* Never pin `pyarrow` to a major version higher than the runtime's native Hadoop filesystem connector supports.
+* Run `scripts/verify_dbr_compatibility.py` in CI to detect conflicting pre-installed packages.
