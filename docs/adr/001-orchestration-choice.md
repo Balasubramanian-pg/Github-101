@@ -16,3 +16,13 @@ The platform requires an orchestrator to manage CI/CD pipelines, automated testi
    * *Cons*: Requires separate control plane, additional licensing, organizational overhead.
 3. **GitHub Actions + Databricks Workflows (Selected Architecture)**
    * *Pros*: Native integration with source code, zero server maintenance, OIDC security, native Databricks Asset Bundle support, pay-as-you-go execution.
+
+## Decision Drivers & Evaluation Matrix
+
+| Criterion (Weight: 1-5) | Airflow | GitHub Actions + Databricks Workflows |
+| :--- | :--- | :--- |
+| **Operational Overhead (5)** | 2/5 (Requires VM management / upgrades) | **5/5 (Fully serverless)** |
+| **CI/CD Integration (5)** | 2/5 (Decoupled from code push) | **5/5 (Native PR triggers & checks)** |
+| **Identity & Security (4)** | 3/5 (Static credentials / IAM roles) | **5/5 (Keyless OIDC federation)** |
+| **Cost Efficiency (4)** | 2/5 (Always-on worker instances) | **5/5 (Zero idle cost)** |
+| **Spark Native Orchestration (4)** | 3/5 (External API polling) | **5/5 (Databricks Workflows native)** |
