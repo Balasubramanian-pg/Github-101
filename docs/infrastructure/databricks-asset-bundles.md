@@ -91,3 +91,13 @@ targets:
 ```
 
 In job definitions, variables are referenced via `${var.catalog}` and `${var.worker_count}`, ensuring development clusters remain small and inexpensive while production scales seamlessly.
+
+## 5. Operational Commands & Maintenance
+
+### Daily Developer Commands
+* `databricks bundle validate`: Checks schema syntax and variable bindings locally.
+* `databricks bundle deploy`: Deploys local bundle state to developer sandbox.
+* `databricks bundle run orders_etl_job`: Executes test run on workspace cluster.
+* `databricks bundle destroy`: Completely tears down personal sandbox resources.
+
+For emergency pipeline rollback procedures, refer to [Emergency Rollback](../runbooks/emergency-rollback.md).
