@@ -17,3 +17,13 @@ A modern lakehouse requires an open, performant, and standardized table format t
 3. **Apache Hudi (Apache Software Foundation)**
    * Optimized for near-real-time streaming upserts (Copy-on-Write and Merge-on-Read).
    * Complex configuration tuning and higher operational friction.
+
+## Technical Comparison
+
+| Feature | Delta Lake | Apache Iceberg | Apache Hudi |
+| :--- | :--- | :--- | :--- |
+| **Spark/Photon Optimization** | **Excellent (Native)** | Good | Moderate |
+| **ACID Guarantees** | Serializable / WriteSerializable | Snapshot Isolation | Snapshot Isolation |
+| **Liquid Clustering** | **Yes (Automatic)** | Partition Evolution | Clustering Service |
+| **Cross-Format Read (UniForm)** | **Yes (Generates Iceberg metadata)**| No | No |
+| **Governance Integration** | **Native Unity Catalog** | External Catalogs | External Catalogs |
