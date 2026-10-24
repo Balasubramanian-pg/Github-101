@@ -16,3 +16,23 @@ Emergency rollback requires addressing both **Code State** and **Data State**:
 | :--- | :--- | :--- | :--- |
 | **Tier 1: Data State** | Delta Lake Storage | SQL `RESTORE TABLE ... TO VERSION AS OF` | **< 5 minutes** |
 | **Tier 2: Code State** | Databricks Workflows / DABs | `git revert` + Automated CI Bundle Deploy | **< 10 minutes** |
+
+## 3. Rollback Execution Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant ONC as On-Call Engineer
+    participant DBR as Databricks SQL Warehouse
+    participant GHA as GitHub Actions CD
+    participant SLV as Delta Lake (Silver/Gold)
+
+    ONC->>DBR: PAUSE active streaming/batch ingestion jobs
+    ONC->>DBR: Identify last known healthy commit version via DESCRIBE HISTORY
+    ONC->>SLV: Execute RESTORE TABLE silver.orders TO VERSION AS OF [healthy_version]
+    SLV-->>ONC: Table restored atomically in 3 seconds
+    ONC->>GHA: Trigger emergency git revert workflow on main branch
+    GHA->>DBR: Re-deploy previous stable Databricks Asset Bundle
+    ONC->>DBR: RESUME ingestion jobs
+    ONC->>ONC: Run reconciliation checks to verify data integrity
+```
